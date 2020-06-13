@@ -18,10 +18,11 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven {url 'https://dl.bintray.com/chaozhouzhang/maven' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
