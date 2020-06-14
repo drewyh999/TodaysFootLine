@@ -6,7 +6,7 @@ import cn.bmob.v3.datatype.BmobFile;
 public class User extends BmobUser {
     private String gender;
 
-    private BmobFile avatar;
+    private String avatar;
 
     public String getGender() {
         return gender;
@@ -16,12 +16,11 @@ public class User extends BmobUser {
         this.gender = gender;
     }
 
-    public BmobFile getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(BmobFile avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
 }
