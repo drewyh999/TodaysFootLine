@@ -3,23 +3,23 @@ package cn.thundergaba.todaysfootline;
 import cn.bmob.v3.BmobObject;
 
 public class Praise extends BmobObject {
-    private Integer pnum;
+    private String praiserPhoneNumber;
 
-    private String purl;
+    private String praiseitemid;
 
-    public Integer getPnum() {
-        return pnum;
+    public String getPraiserPhoneNumber() {
+        return praiserPhoneNumber;
     }
 
-    public void setPnum(Integer pnum) {
-        this.pnum = pnum;
+    public void setPraiserPhoneNumber(String praiserPhoneNumber) {
+        this.praiserPhoneNumber = praiserPhoneNumber;
     }
 
-    public String getPurl() {
-        return purl;
+    public String getPraiseitemid() {
+        return praiseitemid;
     }
 
-    public void setPurl(String purl) {
-        this.purl = purl;
+    public void setPraiseitemid(String praiseitemid) {
+        this.praiseitemid = praiseitemid;
     }
 }

@@ -4,7 +4,7 @@ import android.net.Uri;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class videomoduledev extends AppCompatActivity implements VideoView.OnFragmentInteractionListener {
+public class videomoduledev extends AppCompatActivity implements VideoFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

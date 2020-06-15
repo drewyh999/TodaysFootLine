@@ -3,33 +3,41 @@ package cn.thundergaba.todaysfootline;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.VideoView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link VideoView.OnFragmentInteractionListener} interface
+ * {@link VideoFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link VideoView#newInstance} factory method to
+ * Use the {@link VideoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VideoView extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+public class VideoFragment extends Fragment {
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public VideoView() {
+    public VideoFragment() {
         // Required empty public constructor
     }
 
@@ -41,9 +49,9 @@ public class VideoView extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment VideoView.
      */
-    // TODO: Rename and change types and number of parameters
-    public static VideoView newInstance(String param1, String param2) {
-        VideoView fragment = new VideoView();
+
+    public static VideoFragment newInstance(String param1, String param2) {
+        VideoFragment fragment = new VideoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,10 +72,12 @@ public class VideoView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_video_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_video_view, container, false);
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -102,7 +112,54 @@ public class VideoView extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.VideoViewholder>{
+        List<WVideo> list;
+        @NonNull
+        @Override
+        public VideoViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.videoitem,parent,false);
+            final VideoViewholder holder = new VideoViewholder(view);
+            ImageButton btn_comment = view.findViewById(R.id.btn_v_comment);
+            btn_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Jump to video detail activity
+                }
+            });
+            //TODO Add onclick listener for the like button
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        public class VideoViewholder extends RecyclerView.ViewHolder{
+            ImageView avatar;
+            TextView user;
+            VideoView videoFragment;
+            public VideoViewholder(@NonNull View itemView) {
+                super(itemView);
+                avatar = itemView.findViewById(R.id.img_v_avatar);
+                user = itemView.findViewById(R.id.txt_v_username);
+                videoFragment = itemView.findViewById(R.id.vid_v_itemvideoview);
+            }
+        }
+
+        public class WVideo extends ToutiaoItem{
+            public String play_url;
+            public boolean is_liked;//是否被当前用户点赞
+        }
     }
 }

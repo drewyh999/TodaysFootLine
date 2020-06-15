@@ -4,7 +4,7 @@ import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
 public class Comment extends BmobObject {
-    private String commenturl;
+    private String commentitemid;
 
     private String authorPhoneNumber;
 
@@ -12,12 +12,12 @@ public class Comment extends BmobObject {
 
     private String content;
 
-    public String getCommenturl() {
-        return commenturl;
+    public String getCommentitemid() {
+        return commentitemid;
     }
 
-    public void setCommenturl(String commenturl) {
-        this.commenturl = commenturl;
+    public void setCommentitemid(String commentitemid) {
+        this.commentitemid = commentitemid;
     }
 
     public String getAuthorPhoneNumber() {
