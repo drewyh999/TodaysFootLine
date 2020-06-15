@@ -24,5 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.498" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/fragment" app:icon_type="heart"/>
+            app:layout_constraintBottom_toTopOf="@+id/fragment"
+            app:like_drawable="@drawable/thumb_on"
+            app:unlike_drawable="@drawable/thumb_off"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

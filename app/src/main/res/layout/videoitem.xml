@@ -3,35 +3,46 @@
               xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="match_parent" android:background="#83C4BCBC">
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content" app:cardCornerRadius="30dp" app:contentPadding="15dp"
+            app:cardElevation="15dp" app:cardMaxElevation="15dp"
+            app:cardBackgroundColor="@color/cardview_light_background">
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             <VideoView
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp" android:id="@+id/videoView"/>
+                    android:layout_height="250dp" android:id="@+id/videoView"
+                    android:foreground="@drawable/bmob_update_close_bg_normal"/>
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" android:baselineAligned="false">
                 <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" tools:srcCompat="@tools:sample/avatars"
-                        android:id="@+id/imageView2" android:layout_weight="1"/>
+                        android:layout_height="40dp" tools:srcCompat="@tools:sample/avatars"
+                        android:id="@+id/imageView2" android:layout_weight="1" android:layout_width="40dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="240dp"
+                        android:layout_height="40dp" android:id="@+id/textView" android:layout_weight="1"
+                        android:textSize="30sp"/>
                 <com.like.LikeButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:circle_end_color="@android:color/holo_blue_dark"
                         app:circle_start_color="@android:color/holo_blue_bright"
                         app:dots_primary_color="@android:color/holo_blue_light"
                         app:dots_secondary_color="@android:color/holo_blue_dark"
                         app:icon_size="25dp"
-                        app:icon_type="heart"/>
+                        app:like_drawable="@drawable/thumb_on"
+                        app:unlike_drawable="@drawable/thumb_off"/>
+                <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" android:id="@+id/button" android:background="@drawable/message"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
