@@ -215,9 +215,11 @@ public class VideoFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
+            // TODO user avatar is not correctly loaded
             holder.avatar.setImageURI(Uri.parse(list.get(position).getUserInfo().getAvatar_url()));
             holder.user.setText(list.get(position).getUserInfo().getName());
             holder.video.setVideoURI(Uri.parse(list.get(position).getPlay_url()));
+            //TODO video not played
             //TODO get the thumbnail of each video
             // Bitmap map = new Bitmap();
             //holder.video.setBackground();
