@@ -1,19 +1,34 @@
 package cn.thundergaba.todaysfootline;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.VideoView;
+import android.util.Log;
+import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.like.LikeButton;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +45,8 @@ public class VideoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private final String TAG = "VIDEO_FRAGMENT";
 
 
     private String mParam1;
@@ -73,7 +90,10 @@ public class VideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_view, container, false);
-
+        RecyclerView videolist = view.findViewById(R.id.v_video_list);
+        LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
+        videolist.setLayoutManager(video_list_manager);
+        UpdateVideoListByCategory("video_new",videolist);
         return view;
     }
 
@@ -116,29 +136,93 @@ public class VideoFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    private void UpdateVideoListByCategory(String category,RecyclerView rview) {
+        final String reqString = "https://api03.6bqb.com/xigua/app/categoryVideo?apikey=B10A922C01D27BB7EEDB02717A72BDA1&category=";
+        new Thread(() -> {
+            try {
+
+                OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
+                Request request = new Request.Builder()
+                        .url(reqString)//请求接口。如果需要传参拼接到接口后面。
+                        .build();
+                Response response = null;
+                response = client.newCall(request).execute();//得到Response 对象
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "response.code()==" + response.code());
+                    Log.d(TAG, "response.message()==" + response.message());
+                    String responsestring = response.body().string();
+                    Log.d(TAG, "res==" + responsestring);
+                    //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+                    JSONObject root_object = new JSONObject(responsestring);
+                    JSONArray video_object_array = root_object.getJSONArray("data");
+                    rview.post(() -> {
+                            try {
+                                List<ToutiaoVideo> newlist = new ArrayList<>();
+                                for (int i = 0; i < video_object_array.length(); i++) {
+                                    JSONObject videoobject = video_object_array.getJSONObject(i);
+                                    ToutiaoVideo video = JsonConversion.GetVideoFromJson(TAG,videoobject);
+                                    if(video != null) {
+                                        newlist.add(video);
+                                    }
+                                }
+                                VideoItemAdapter adapter;
+                                adapter = new VideoItemAdapter(newlist,getActivity());
+                                rview.setAdapter(adapter);
+
+                            } catch (JSONException e) {
+                                Log.d(TAG, e.getMessage());
+                                e.printStackTrace();
+                            }
+                    });
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                Log.d(TAG, e.toString());
+            }
+        }).start();
+    }
+
+
+
     public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.VideoViewholder>{
-        List<WVideo> list;
+        List<ToutiaoVideo> list;
+
+        Activity activity;
+
+        public VideoItemAdapter(List<ToutiaoVideo> list,Activity activity){
+            this.list = list;
+            this.activity = activity;
+        }
         @NonNull
         @Override
         public VideoViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.videoitem,parent,false);
             final VideoViewholder holder = new VideoViewholder(view);
-            ImageButton btn_comment = view.findViewById(R.id.btn_v_comment);
+            Button btn_comment = view.findViewById(R.id.btn_v_comment);
             btn_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO Jump to video detail activity
                 }
             });
-            //TODO Add onclick listener for the like button
+            LikeButton btn_like = view.findViewById(R.id.btn_v_like);
+            //TODO Get the user information and do the like
+
+
             return holder;
         }
 
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
-
+            holder.avatar.setImageURI(Uri.parse(list.get(position).getUserInfo().getAvatar_url()));
+            holder.user.setText(list.get(position).getUserInfo().getName());
+            holder.video.setVideoURI(Uri.parse(list.get(position).getPlay_url()));
+            //TODO get the thumbnail of each video
+            // Bitmap map = new Bitmap();
+            //holder.video.setBackground();
         }
+
 
         @Override
         public int getItemCount() {
@@ -148,18 +232,17 @@ public class VideoFragment extends Fragment {
         public class VideoViewholder extends RecyclerView.ViewHolder{
             ImageView avatar;
             TextView user;
-            VideoView videoFragment;
+            VideoView video;
             public VideoViewholder(@NonNull View itemView) {
                 super(itemView);
                 avatar = itemView.findViewById(R.id.img_v_avatar);
                 user = itemView.findViewById(R.id.txt_v_username);
-                videoFragment = itemView.findViewById(R.id.vid_v_itemvideoview);
+                video = itemView.findViewById(R.id.vid_v_itemvideoview);
             }
         }
 
-        public class WVideo extends ToutiaoItem{
-            public String play_url;
-            public boolean is_liked;//是否被当前用户点赞
-        }
+
     }
+
+
 }
