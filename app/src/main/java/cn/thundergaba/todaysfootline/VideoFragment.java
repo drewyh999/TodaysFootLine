@@ -199,6 +199,8 @@ public class VideoFragment extends Fragment {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.videoitem,parent,false);
             final VideoViewholder holder = new VideoViewholder(view);
+            VideoView video = view.findViewById(R.id.vid_v_itemvideoview);
+            video.setMediaController(new MediaController(getActivity()));
             Button btn_comment = view.findViewById(R.id.btn_v_comment);
             btn_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -216,9 +218,9 @@ public class VideoFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
             // TODO user avatar is not correctly loaded
-            holder.avatar.setImageURI(Uri.parse(list.get(position).getUserInfo().getAvatar_url()));
+            holder.avatar.setImageURL(list.get(position).getUserInfo().getAvatar_url());
             holder.user.setText(list.get(position).getUserInfo().getName());
-            holder.video.setVideoURI(Uri.parse(list.get(position).getPlay_url()));
+            holder.video.setVideoPath(list.get(position).getPlay_url());
             //TODO video not played
             //TODO get the thumbnail of each video
             // Bitmap map = new Bitmap();
@@ -232,7 +234,7 @@ public class VideoFragment extends Fragment {
         }
 
         public class VideoViewholder extends RecyclerView.ViewHolder{
-            ImageView avatar;
+            MyImageView avatar;
             TextView user;
             VideoView video;
             public VideoViewholder(@NonNull View itemView) {
