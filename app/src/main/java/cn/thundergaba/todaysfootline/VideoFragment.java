@@ -2,16 +2,21 @@ package cn.thundergaba.todaysfootline;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Observable;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +32,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -200,7 +206,20 @@ public class VideoFragment extends Fragment {
                     .inflate(R.layout.videoitem,parent,false);
             final VideoViewholder holder = new VideoViewholder(view);
             VideoView video = view.findViewById(R.id.vid_v_itemvideoview);
-            video.setMediaController(new MediaController(getContext()));
+            Button play_btn = view.findViewById(R.id.v_play_btn);
+            ConstraintLayout play_btn_layout = view.findViewById(R.id.v_video_cover);
+//            video.setMediaController(new MediaController(getContext()));
+            video.setOnClickListener((v) ->{
+                if(video.isPlaying()){
+                    video.pause();
+                    play_btn_layout.setVisibility(View.VISIBLE);
+                }
+            });
+            play_btn.setOnClickListener((v) ->{
+                video.start();
+                video.getBackground().setAlpha(0);
+                play_btn_layout.setVisibility(View.GONE);
+            });
             Button btn_comment = view.findViewById(R.id.btn_v_comment);
             btn_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -215,15 +234,43 @@ public class VideoFragment extends Fragment {
             return holder;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
             holder.avatar.setImageURL(list.get(position).getUserInfo().getAvatar_url());
             holder.user.setText(list.get(position).getUserInfo().getName());
             holder.video.setVideoPath(list.get(position).getPlay_url());
-            //holder.video.start();
-            //TODO get the thumbnail of each video
-            // Bitmap map = new Bitmap();
-            //holder.video.setBackground();
+
+            holder.layout.setVisibility(View.VISIBLE);
+            new Thread(() ->{
+                try {
+                    OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
+                    Request request = new Request.Builder()
+                            .url(list.get(position).getCover_url())//请求接口。如果需要传参拼接到接口后面。
+                            .build();
+                    Response response = null;
+                    response = client.newCall(request).execute();//得到Response 对象
+                    Log.d(TAG,"COVER HTTP CONNECTION ESTABLISHED");
+                    if (response.isSuccessful()) {
+                        InputStream inputStream = response.body().byteStream();
+                        //使用工厂把网络的输入流生产Bitmap
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//                        holder.video.setBackground(new BitmapDrawable(bitmap));
+                        holder.video.post(()->{
+                            holder.video.setBackground(new BitmapDrawable(bitmap));
+                            holder.video.getBackground().setAlpha(255);
+                            //TODO 划出视野后再次加载时封面不见了
+                        });
+                        inputStream.close();
+                    }else {
+                        Log.e(TAG,"VIDEO COVER IMAGE FAILED TO GET");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, Objects.requireNonNull(e.getMessage()));
+
+                }
+            }).start();
         }
 
 
@@ -236,11 +283,13 @@ public class VideoFragment extends Fragment {
             MyImageView avatar;
             TextView user;
             VideoView video;
+            ConstraintLayout layout;
             public VideoViewholder(@NonNull View itemView) {
                 super(itemView);
                 avatar = itemView.findViewById(R.id.img_v_avatar);
                 user = itemView.findViewById(R.id.txt_v_username);
                 video = itemView.findViewById(R.id.vid_v_itemvideoview);
+                layout = itemView.findViewById(R.id.v_video_cover);
             }
         }
 

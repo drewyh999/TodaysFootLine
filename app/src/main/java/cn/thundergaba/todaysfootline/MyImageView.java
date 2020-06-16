@@ -65,16 +65,6 @@ public class MyImageView extends ImageView {
             @Override
             public void run() {
                 try {
-                    //把传过来的路径转成URL
-//                    URL url = new URL(path);
-//                    Log.d(TAG,"IMG_URL:" + url.getPath());
-//                    Log.d(TAG,"IMG_PATH:" + path);
-//                    //获取连接
-//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                    //使用GET方法访问网络
-//                    connection.setRequestMethod("GET");
-//                    //超时时间为10秒
-//                    connection.setConnectTimeout(10000);
                     OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
                     Request request = new Request.Builder()
                             .url(path)//请求接口。如果需要传参拼接到接口后面。
