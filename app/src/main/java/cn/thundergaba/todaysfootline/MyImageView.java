@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -31,8 +33,8 @@ public class MyImageView extends ImageView {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case GET_DATA_SUCCESS:
-                    Bitmap bitmap = (Bitmap) msg.obj;
-                    setImageBitmap(bitmap);
+                    RoundedBitmapDrawable bitmap = (RoundedBitmapDrawable) msg.obj;
+                    setImageDrawable(bitmap);
                     break;
                 case NETWORK_ERROR:
                     Toast.makeText(getContext(),"网络连接失败",Toast.LENGTH_SHORT).show();
@@ -84,9 +86,12 @@ public class MyImageView extends ImageView {
                         InputStream inputStream = response.body().byteStream();
                         //使用工厂把网络的输入流生产Bitmap
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources()
+                                                                                                        ,bitmap);
+                        roundedBitmapDrawable.setCircular(true);
                         //利用Message把图片发给Handler
                         Message msg = Message.obtain();
-                        msg.obj = bitmap;
+                        msg.obj = roundedBitmapDrawable;
                         msg.what = GET_DATA_SUCCESS;
                         handler.sendMessage(msg);
                         inputStream.close();

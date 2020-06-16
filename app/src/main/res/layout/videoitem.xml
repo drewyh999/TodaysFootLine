@@ -3,35 +3,46 @@
               xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content" android:background="@android:color/transparent"
+              android:layout_height="350dp" android:background="@android:color/transparent"
 >
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" app:cardCornerRadius="30dp" app:contentPadding="15dp"
-            app:cardElevation="15dp" app:cardMaxElevation="15dp"
+            android:layout_height="wrap_content" app:cardCornerRadius="30dp"
+            app:cardElevation="15dp" app:cardMaxElevation="5dp"
             app:cardBackgroundColor="@color/cardview_light_background" android:layout_margin="10dp">
         <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <VideoView
+                android:layout_width="wrap_content"
+                android:layout_height="311dp" android:background="@drawable/border_radius">
+            <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp" android:id="@+id/vid_v_itemvideoview"
-            />
+                    android:layout_height="wrap_content">
+                <VideoView
+                        android:layout_width="wrap_content"
+                        android:layout_height="250dp" android:id="@+id/vid_v_itemvideoview"
+                />
+            </LinearLayout>
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent" android:baselineAligned="false">
-                <cn.thundergaba.todaysfootline.MyImageView
-                        android:layout_height="40dp" tools:srcCompat="@tools:sample/avatars"
-                        android:id="@+id/img_v_avatar" android:layout_weight="1" android:layout_width="40dp"
-                        android:layout_margin="10dp"/>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:background="@drawable/border_radius" android:layout_margin="10dp">
+                    <cn.thundergaba.todaysfootline.MyImageView
+                            android:layout_height="40dp" tools:srcCompat="@tools:sample/avatars"
+                            android:id="@+id/img_v_avatar" android:layout_width="40dp"
+                    />
+                </LinearLayout>
                 <TextView
                         android:text="TextView"
-                        android:layout_width="200dp"
+                        android:layout_width="230dp"
                         android:layout_height="20dp" android:id="@+id/txt_v_username" android:layout_weight="1"
-                        android:textSize="15sp" android:layout_marginLeft="0dp"
+                        android:textSize="15sp"
                         android:layout_marginTop="20dp" android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"/>
                 <com.like.LikeButton
