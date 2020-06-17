@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 import com.like.LikeButton;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -127,7 +128,7 @@ public class VideoFragment extends Fragment {
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
         LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
         videolist.setLayoutManager(video_list_manager);
-        UpdateVideoListByCategory("video_new",videolist);
+        UpdateVideoListByCategory("video_new",videolist,"0");
         TabLayout tabLayout = view.findViewById(R.id.v_tablayout);
         for(String key:categories.keySet()){
             TabLayout.Tab tab =tabLayout.newTab();
@@ -138,7 +139,7 @@ public class VideoFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                UpdateVideoListByCategory(categories.get(tab.getText().toString()),videolist);
+                UpdateVideoListByCategory(categories.get(tab.getText().toString()),videolist,"0");
             }
 
             @Override
@@ -151,7 +152,15 @@ public class VideoFragment extends Fragment {
 
             }
         });
+        tabLayout.setSelected(true);
+        SmartRefreshLayout smartRefreshLayout = view.findViewById(R.id.refreshLayout);
+        smartRefreshLayout.setOnRefreshListener((v) ->{
+            smartRefreshLayout.finishRefresh(2000);
+            String category = tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString();
+            Log.d(TAG,"THE SELECTED TAB TEXT IS " + category);
+            UpdateVideoListByCategory(categories.get(category),videolist,"0");
 
+        });
         return view;
     }
 
@@ -193,9 +202,9 @@ public class VideoFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void UpdateVideoListByCategory(String category,RecyclerView rview) {
-        final String reqString = "https://api03.6bqb.com/xigua/app/categoryVideo?apikey=B10A922C01D27BB7EEDB02717A72BDA1&category=" + category;
+    private void UpdateVideoListByCategory(String category,RecyclerView rview,String page) {
 
+        final String reqString = "https://api03.6bqb.com/xigua/app/categoryVideo?apikey=B10A922C01D27BB7EEDB02717A72BDA1&category=" + category + "&page=" + page;
         new Thread(() -> {
             try {
 
