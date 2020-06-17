@@ -11,11 +11,13 @@
         <SearchView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:queryHint="搜索视频">
-
         </SearchView>
-        <androidx.recyclerview.widget.RecyclerView
+        <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/v_category_bar"/>
+                android:layout_height="wrap_content" android:id="@+id/v_tablayout">
+
+
+        </com.google.android.material.tabs.TabLayout>
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/v_video_list">
