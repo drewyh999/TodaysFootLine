@@ -1,6 +1,7 @@
 package cn.thundergaba.todaysfootline;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,6 +55,7 @@ public class VideoFragment extends Fragment {
 
     private final String TAG = "VIDEO_FRAGMENT";
 
+    private ProgressDialog progressDialog;
 
     private String mParam1;
     private String mParam2;
@@ -112,6 +114,23 @@ public class VideoFragment extends Fragment {
         categories.put("军事","subv_xg_military");
     }
 
+    public void buildProgressDialog(int id) {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        progressDialog.setMessage("正在载入");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    public void cancelProgressDialog() {
+        if (progressDialog != null)
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +161,7 @@ public class VideoFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                buildProgressDialog(0);
                 UpdateVideoListByCategory(categories.get(tab.getText().toString()),videolist,"0");
             }
 
@@ -156,6 +176,7 @@ public class VideoFragment extends Fragment {
             }
         });
         tabLayout.setSelected(true);
+        buildProgressDialog(0);
         UpdateVideoListByCategory(categories.get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()),videolist,"0");
         SmartRefreshLayout smartRefreshLayout = view.findViewById(R.id.refreshLayout);
         smartRefreshLayout.setOnRefreshListener((v) ->{
@@ -224,8 +245,6 @@ public class VideoFragment extends Fragment {
                 Response response = null;
                 response = client.newCall(request).execute();//得到Response 对象
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "response.code()==" + response.code());
-                    Log.d(TAG, "response.message()==" + response.message());
                     String responsestring = response.body().string();
                     Log.d(TAG, "res==" + responsestring);
                     //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
@@ -250,6 +269,7 @@ public class VideoFragment extends Fragment {
                                 else{
                                     videoItemAdapter.ConcatenateVideoList(newlist);
                                 }
+                                cancelProgressDialog();
 
                             } catch (JSONException e) {
                                 Log.d(TAG, e.getMessage());
@@ -282,17 +302,20 @@ public class VideoFragment extends Fragment {
             VideoView video = view.findViewById(R.id.vid_v_itemvideoview);
             Button play_btn = view.findViewById(R.id.v_play_btn);
             ConstraintLayout play_btn_layout = view.findViewById(R.id.v_video_cover);
+            ConstraintLayout title_layout = view.findViewById(R.id.v_title_layout);
 //            video.setMediaController(new MediaController(getContext()));
             video.setOnClickListener((v) ->{
                 if(video.isPlaying()){
                     video.pause();
                     play_btn_layout.setVisibility(View.VISIBLE);
+                    title_layout.setVisibility(View.VISIBLE);
                 }
             });
             play_btn.setOnClickListener((v) ->{
                 video.start();
                 video.getBackground().setAlpha(0);
                 play_btn_layout.setVisibility(View.GONE);
+                title_layout.setVisibility(View.GONE);
             });
 
 
@@ -313,6 +336,7 @@ public class VideoFragment extends Fragment {
             holder.avatar.setImageURL(videoitem.getUserInfo().getAvatar_url());
             holder.user.setText(videoitem.getUserInfo().getName());
             holder.video.setVideoPath(videoitem.getPlay_url());
+            holder.title.setText(videoitem.getTitle());
             holder.btn_comment.setOnClickListener((v) ->{
                 String item_id = videoitem.getItem_id();
                 String play_url = videoitem.getPlay_url();
@@ -368,6 +392,7 @@ public class VideoFragment extends Fragment {
             VideoView video;
             ConstraintLayout layout;
             Button btn_comment;
+            TextView title;
             public VideoViewholder(@NonNull View itemView) {
                 super(itemView);
                 avatar = itemView.findViewById(R.id.img_v_avatar);
@@ -375,6 +400,7 @@ public class VideoFragment extends Fragment {
                 video = itemView.findViewById(R.id.vid_v_itemvideoview);
                 layout = itemView.findViewById(R.id.v_video_cover);
                 btn_comment = itemView.findViewById(R.id.btn_v_comment);
+                title = itemView.findViewById(R.id.v_video_title);
             }
         }
 
