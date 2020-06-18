@@ -128,7 +128,7 @@ public class VideoFragment extends Fragment {
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
         LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
         videolist.setLayoutManager(video_list_manager);
-        UpdateVideoListByCategory("video_new",videolist,"0");
+
         TabLayout tabLayout = view.findViewById(R.id.v_tablayout);
         for(String key:categories.keySet()){
             TabLayout.Tab tab =tabLayout.newTab();
@@ -153,6 +153,7 @@ public class VideoFragment extends Fragment {
             }
         });
         tabLayout.setSelected(true);
+        UpdateVideoListByCategory(categories.get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()),videolist,"0");
         SmartRefreshLayout smartRefreshLayout = view.findViewById(R.id.refreshLayout);
         smartRefreshLayout.setOnRefreshListener((v) ->{
             smartRefreshLayout.finishRefresh(2000);
