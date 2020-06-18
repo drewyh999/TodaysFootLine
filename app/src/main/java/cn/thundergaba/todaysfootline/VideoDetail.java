@@ -31,6 +31,8 @@ public class VideoDetail extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
+    private ConstraintLayout no_comment_layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class VideoDetail extends AppCompatActivity {
         recyclerView = findViewById(R.id.v_comment_rview);
 
         item_id = getIntent().getExtras().getString("item_id");
+        no_comment_layout = findViewById(R.id.v_no_comment_layout);
+
         BmobGetCommentByItemId(item_id);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -96,6 +100,9 @@ public class VideoDetail extends AppCompatActivity {
                 if (e == null) {
                     commentAdapter = new CommentAdapter(object);
                     recyclerView.setAdapter(commentAdapter);
+                    if(object.size() != 0){
+                        no_comment_layout.setVisibility(View.GONE);
+                    }
                     Log.d(TAG,"COMMENTS FETCHED" + " size:" + object.size());
                 } else {
                     Log.e(TAG, e.toString());
@@ -152,6 +159,7 @@ public class VideoDetail extends AppCompatActivity {
 
         public void AddComment(Comment newcomment){
             list.add(newcomment);
+            no_comment_layout.setVisibility(View.GONE);
             notifyDataSetChanged();
         }
 
