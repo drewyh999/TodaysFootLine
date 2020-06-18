@@ -13,13 +13,12 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String APP_ID = "099b2f81af9c83ba937e77ac8aa9b865";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bmob.initialize(this, APP_ID); //初始化Bmob应用
+
     }
 
 

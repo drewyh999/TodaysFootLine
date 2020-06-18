@@ -60,6 +60,8 @@ public class VideoFragment extends Fragment {
 
     private HashMap<String,String> categories;
 
+    private VideoItemAdapter videoItemAdapter;
+
     private OnFragmentInteractionListener mListener;
 
     public VideoFragment() {
@@ -123,6 +125,7 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_video_view, container, false);
         InitCategories();
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
@@ -162,7 +165,11 @@ public class VideoFragment extends Fragment {
             UpdateVideoListByCategory(categories.get(category),videolist,"0");
 
         });
-        //TODO implement load more
+        smartRefreshLayout.setOnLoadMoreListener((v) ->{
+            smartRefreshLayout.finishLoadMore(2000);
+            String category = tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString();
+            UpdateVideoListByCategory(categories.get(category),videolist,JsonConversion.next_page);
+        });
         return view;
     }
 
@@ -223,6 +230,8 @@ public class VideoFragment extends Fragment {
                     Log.d(TAG, "res==" + responsestring);
                     //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                     JSONObject root_object = new JSONObject(responsestring);
+                    JsonConversion.next_page = root_object.getString("page");
+                    Log.d(TAG,"NEXT RESULT PAGE IS " + JsonConversion.next_page);
                     JSONArray video_object_array = root_object.getJSONArray("data");
                     rview.post(() -> {
                             try {
@@ -234,9 +243,13 @@ public class VideoFragment extends Fragment {
                                         newlist.add(video);
                                     }
                                 }
-                                VideoItemAdapter adapter;
-                                adapter = new VideoItemAdapter(newlist,getActivity());
-                                rview.setAdapter(adapter);
+                                if(page == "0") {
+                                    videoItemAdapter = new VideoItemAdapter(newlist, getActivity());
+                                    rview.setAdapter(videoItemAdapter);
+                                }
+                                else{
+                                    videoItemAdapter.ConcatenateVideoList(newlist);
+                                }
 
                             } catch (JSONException e) {
                                 Log.d(TAG, e.getMessage());
@@ -339,10 +352,14 @@ public class VideoFragment extends Fragment {
             }).start();
         }
 
-
         @Override
         public int getItemCount() {
             return list.size();
+        }
+
+        public void ConcatenateVideoList(List<ToutiaoVideo> next_page_video){
+            list.addAll(next_page_video);
+            notifyDataSetChanged();
         }
 
         public class VideoViewholder extends RecyclerView.ViewHolder{
