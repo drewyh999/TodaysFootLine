@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".VideoDetail" android:orientation="vertical">
+    <FrameLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <VideoView
+                android:layout_width="match_parent"
+                android:layout_height="270dp" android:id="@+id/v_video_detail"
+                app:layout_constraintBottom_toBottomOf="parent" tools:layout_editor_absoluteX="25dp"
+        />
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="410dp"
+                android:layout_height="270dp" android:visibility="visible" android:layout_gravity="top"
+                android:id="@+id/v_video_cover_detail" android:background="#40575555" android:alpha="0.8">
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/v_play_btn_detail"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@android:drawable/ic_media_play"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="270dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+                android:layout_width="296dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/v_comment_edit" android:hint="输入评论内容" android:layout_marginTop="8dp"/>
+        <Button
+                android:text="发送"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/v_comment_submit"
+                android:layout_margin="5dp" android:background="@color/design_default_color_secondary"/>
+    </LinearLayout>
+</LinearLayout>

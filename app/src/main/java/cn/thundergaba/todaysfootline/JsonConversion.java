@@ -16,15 +16,20 @@ public class JsonConversion {
                 TouTiaoUserInfo userInfo = new TouTiaoUserInfo(user_object.getString("name")
                                                             ,user_object.getString("avatar_url"));
                 JSONObject video_info_object = new JSONObject(object.getString("video_play_info"));
+                if(!video_info_object.getJSONObject("video_list").has("video_1")){
+                    return null;
+                }
                 String main_url_encoded = video_info_object.getJSONObject("video_list")
-                                            .getJSONObject("video_2")
+                                            .getJSONObject("video_1")
                                             .getString("main_url");
                 String main_url_decoded = new String(Base64.decode(main_url_encoded, Base64.DEFAULT));
                 Log.d(TAG,"DECODED URL:" + main_url_decoded);
                 String item_id = new JSONObject(object.getString("pread_params")).getString("item_id");
                 Date publish_date = new Date(object.getInt("publish_time"));
                 String first_frame_pic_url = object.getJSONObject("first_frame_image").getString("url");
+                String title = object.getString("title");
                 ToutiaoVideo result = new ToutiaoVideo();
+                result.setTitle(title);
                 result.setIs_liked(false);
                 result.setUserInfo(userInfo);
                 result.setPlay_url(main_url_decoded);

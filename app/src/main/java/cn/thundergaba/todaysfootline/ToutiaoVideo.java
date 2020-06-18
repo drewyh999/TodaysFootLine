@@ -1,12 +1,23 @@
 package cn.thundergaba.todaysfootline;
 
 public class ToutiaoVideo extends ToutiaoItem{
+        private String title;
 
-        private String play_url;
+
+
+    private String play_url;
 
         private boolean is_liked;//是否被当前用户点赞
 
         private String cover_url;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
         public String getCover_url() {
             return cover_url;

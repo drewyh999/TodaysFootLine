@@ -2,28 +2,27 @@ package cn.thundergaba.todaysfootline;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Observable;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.tabs.TabLayout;
 import com.like.LikeButton;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -34,6 +33,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,6 +57,8 @@ public class VideoFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+
+    private HashMap<String,String> categories;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,6 +84,32 @@ public class VideoFragment extends Fragment {
         return fragment;
     }
 
+    private void InitCategories(){
+        categories = new HashMap<>();
+        categories.put("全部","video_new");
+        categories.put("小视频","xg_hotsoon_video");
+        categories.put("游戏","subv_xg_game");
+        categories.put("vlog","subv_xg_vlog");
+        categories.put("影视","subv_xg_movie");
+        categories.put("音乐","subv_xg_music");
+        categories.put("综艺","subv_variety");
+        categories.put("农人","subv_video_agriculture");
+        categories.put("美食","subv_video_food");
+        categories.put("宠物","subv_video_pet");
+        categories.put("儿童","subv_video_child");
+        categories.put("搞笑","subv_xg_funny");
+        categories.put("体育","subv_car");
+        categories.put("娱乐","subv_xg_entertainment");
+        categories.put("文化","subv_video_culture");
+        categories.put("手工","subv_xg_hand_made");
+        categories.put("金秒奖","subv_jmj");
+        categories.put("科技","subv_video_tech");
+        categories.put("广场舞","subv_video_squaredance");
+        categories.put("旅游","subv_xg_travel");
+        categories.put("NBA","subv_xg_nba");
+        categories.put("军事","subv_xg_military");
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,10 +124,44 @@ public class VideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_view, container, false);
+        InitCategories();
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
         LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
         videolist.setLayoutManager(video_list_manager);
-        UpdateVideoListByCategory("video_new",videolist);
+        UpdateVideoListByCategory("video_new",videolist,"0");
+        TabLayout tabLayout = view.findViewById(R.id.v_tablayout);
+        for(String key:categories.keySet()){
+            TabLayout.Tab tab =tabLayout.newTab();
+            tab.setText(key);
+            tabLayout.addTab(tab);
+        }
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                UpdateVideoListByCategory(categories.get(tab.getText().toString()),videolist,"0");
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        tabLayout.setSelected(true);
+        SmartRefreshLayout smartRefreshLayout = view.findViewById(R.id.refreshLayout);
+        smartRefreshLayout.setOnRefreshListener((v) ->{
+            smartRefreshLayout.finishRefresh(2000);
+            String category = tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString();
+            Log.d(TAG,"THE SELECTED TAB TEXT IS " + category);
+            UpdateVideoListByCategory(categories.get(category),videolist,"0");
+
+        });
+        //TODO implement load more
         return view;
     }
 
@@ -138,12 +200,12 @@ public class VideoFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-
         void onFragmentInteraction(Uri uri);
     }
 
-    private void UpdateVideoListByCategory(String category,RecyclerView rview) {
-        final String reqString = "https://api03.6bqb.com/xigua/app/categoryVideo?apikey=B10A922C01D27BB7EEDB02717A72BDA1&category=";
+    private void UpdateVideoListByCategory(String category,RecyclerView rview,String page) {
+
+        final String reqString = "https://api03.6bqb.com/xigua/app/categoryVideo?apikey=B10A922C01D27BB7EEDB02717A72BDA1&category=" + category + "&page=" + page;
         new Thread(() -> {
             try {
 
@@ -188,8 +250,6 @@ public class VideoFragment extends Fragment {
         }).start();
     }
 
-
-
     public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.VideoViewholder>{
         List<ToutiaoVideo> list;
 
@@ -220,14 +280,12 @@ public class VideoFragment extends Fragment {
                 video.getBackground().setAlpha(0);
                 play_btn_layout.setVisibility(View.GONE);
             });
-            Button btn_comment = view.findViewById(R.id.btn_v_comment);
-            btn_comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO Jump to video detail activity
-                }
-            });
+
+
             LikeButton btn_like = view.findViewById(R.id.btn_v_like);
+            btn_like.setOnClickListener((v) ->{
+
+            });
             //TODO Get the user information and do the like
 
 
@@ -237,10 +295,18 @@ public class VideoFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
-            holder.avatar.setImageURL(list.get(position).getUserInfo().getAvatar_url());
-            holder.user.setText(list.get(position).getUserInfo().getName());
-            holder.video.setVideoPath(list.get(position).getPlay_url());
-
+            ToutiaoVideo videoitem = list.get(position);
+            holder.avatar.setImageURL(videoitem.getUserInfo().getAvatar_url());
+            holder.user.setText(videoitem.getUserInfo().getName());
+            holder.video.setVideoPath(videoitem.getPlay_url());
+            holder.btn_comment.setOnClickListener((v) ->{
+                String item_id = videoitem.getItem_id();
+                String play_url = videoitem.getPlay_url();
+                Intent intent = new Intent(getActivity(),VideoDetail.class);
+                intent.putExtra("item_id",item_id);
+                intent.putExtra("play_url",play_url);
+                startActivity(intent);
+            });
             holder.layout.setVisibility(View.VISIBLE);
             new Thread(() ->{
                 try {
@@ -259,7 +325,6 @@ public class VideoFragment extends Fragment {
                         holder.video.post(()->{
                             holder.video.setBackground(new BitmapDrawable(bitmap));
                             holder.video.getBackground().setAlpha(255);
-                            //TODO 划出视野后再次加载时封面不见了
                         });
                         inputStream.close();
                     }else {
@@ -284,17 +349,18 @@ public class VideoFragment extends Fragment {
             TextView user;
             VideoView video;
             ConstraintLayout layout;
+            Button btn_comment;
             public VideoViewholder(@NonNull View itemView) {
                 super(itemView);
                 avatar = itemView.findViewById(R.id.img_v_avatar);
                 user = itemView.findViewById(R.id.txt_v_username);
                 video = itemView.findViewById(R.id.vid_v_itemvideoview);
                 layout = itemView.findViewById(R.id.v_video_cover);
+                btn_comment = itemView.findViewById(R.id.btn_v_comment);
             }
         }
 
 
     }
-
 
 }
