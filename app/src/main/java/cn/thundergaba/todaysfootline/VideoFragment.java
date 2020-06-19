@@ -1,5 +1,6 @@
 package cn.thundergaba.todaysfootline;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,6 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import com.google.android.material.tabs.TabLayout;
 import com.like.LikeButton;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -65,6 +72,8 @@ public class VideoFragment extends Fragment {
     private VideoItemAdapter videoItemAdapter;
 
     private OnFragmentInteractionListener mListener;
+
+    private User user;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -150,7 +159,9 @@ public class VideoFragment extends Fragment {
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
         LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
         videolist.setLayoutManager(video_list_manager);
-
+        if(BmobUser.isLogin()) {
+            user = BmobUser.getCurrentUser(User.class);
+        }
         TabLayout tabLayout = view.findViewById(R.id.v_tablayout);
         for(String key:categories.keySet()){
             TabLayout.Tab tab =tabLayout.newTab();
@@ -293,6 +304,7 @@ public class VideoFragment extends Fragment {
             this.list = list;
             this.activity = activity;
         }
+        @SuppressLint("ShowToast")
         @NonNull
         @Override
         public VideoViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -320,15 +332,13 @@ public class VideoFragment extends Fragment {
 
 
             LikeButton btn_like = view.findViewById(R.id.btn_v_like);
-            btn_like.setOnClickListener((v) ->{
 
-            });
-            //TODO Get the user information and do the like
 
 
             return holder;
         }
 
+        @SuppressLint("ShowToast")
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
@@ -337,6 +347,58 @@ public class VideoFragment extends Fragment {
             holder.user.setText(videoitem.getUserInfo().getName());
             holder.video.setVideoPath(videoitem.getPlay_url());
             holder.title.setText(videoitem.getTitle());
+            if(BmobUser.isLogin()) {
+                BmobQuery<Praise> praiseBmobQuery = new BmobQuery<>();
+                praiseBmobQuery.addWhereEqualTo("item_id", videoitem.getItem_id());
+                praiseBmobQuery.addWhereEqualTo("praiserPhoneNumber",user.getMobilePhoneNumber());
+                praiseBmobQuery.findObjects(new FindListener<Praise>() {
+                    @Override
+                    public void done(List<Praise> object, BmobException e) {
+                        if (e == null && object.size() != 0) {
+                            holder.btn_like.setLiked(true);
+                            Log.d(TAG, "PRAISE INFO FETCHED FOR" + object.get(0).getItem_id());
+                        } else {
+                            Log.e(TAG, e.getMessage());
+                        }
+                    }
+                });
+            }
+            holder.btn_like.setOnClickListener((v) ->{
+                if (BmobUser.isLogin()) {
+                    Praise praise = new Praise();
+                    praise.setItem_id(videoitem.getItem_id());
+                    praise.setPraiserPhoneNumber(user.getMobilePhoneNumber());
+                    if(holder.btn_like.isLiked()){
+                        praise.delete(new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if(e == null){
+                                    holder.btn_like.setLiked(false);
+                                }
+                                else{
+                                    Log.e(TAG,e.toString());
+                                }
+                            }
+                        });
+
+                    }
+                    else{
+                        praise.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if(e == null){
+                                    holder.btn_like.setLiked(true);
+                                }
+                                else{
+                                    Log.e(TAG,e.toString());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(getActivity(),"未登陆不可点赞",Toast.LENGTH_SHORT);
+                }
+            });
             holder.btn_comment.setOnClickListener((v) ->{
                 String item_id = videoitem.getItem_id();
                 String play_url = videoitem.getPlay_url();
@@ -392,6 +454,7 @@ public class VideoFragment extends Fragment {
             VideoView video;
             ConstraintLayout layout;
             Button btn_comment;
+            LikeButton btn_like;
             TextView title;
             public VideoViewholder(@NonNull View itemView) {
                 super(itemView);
@@ -401,6 +464,7 @@ public class VideoFragment extends Fragment {
                 layout = itemView.findViewById(R.id.v_video_cover);
                 btn_comment = itemView.findViewById(R.id.btn_v_comment);
                 title = itemView.findViewById(R.id.v_video_title);
+                btn_like = itemView.findViewById(R.id.btn_v_like);
             }
         }
 

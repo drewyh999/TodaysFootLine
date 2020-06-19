@@ -5,7 +5,7 @@ import cn.bmob.v3.BmobObject;
 public class Praise extends BmobObject {
     private String praiserPhoneNumber;
 
-    private String praiseitemid;
+    private String item_id;
 
     public String getPraiserPhoneNumber() {
         return praiserPhoneNumber;
@@ -15,11 +15,11 @@ public class Praise extends BmobObject {
         this.praiserPhoneNumber = praiserPhoneNumber;
     }
 
-    public String getPraiseitemid() {
-        return praiseitemid;
+    public String getItem_id() {
+        return item_id;
     }
 
-    public void setPraiseitemid(String praiseitemid) {
-        this.praiseitemid = praiseitemid;
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
     }
 }

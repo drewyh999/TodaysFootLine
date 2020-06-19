@@ -1,5 +1,6 @@
 package cn.thundergaba.todaysfootline;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public class VideoDetail extends AppCompatActivity {
 
     private ConstraintLayout no_comment_layout;
 
+    @SuppressLint("ShowToast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +67,7 @@ public class VideoDetail extends AppCompatActivity {
                 commentAdapter.AddComment(comment_item);
                 BmobInsertNewComment(comment_item);
                 comment_content.setText("");
-                Toast.makeText(VideoDetail.this,"评论成功",Toast.LENGTH_SHORT);
+               // Toast.makeText(VideoDetail.this,"评论成功",Toast.LENGTH_SHORT);
             } else {
                Toast.makeText(VideoDetail.this,"未登陆不可评论",Toast.LENGTH_SHORT);
             }
@@ -92,9 +94,9 @@ public class VideoDetail extends AppCompatActivity {
     }
 
     private void BmobGetCommentByItemId(String item_id) {
-        BmobQuery<Comment> categoryBmobQuery = new BmobQuery<>();
-        categoryBmobQuery.addWhereEqualTo("commentitemid", item_id);
-        categoryBmobQuery.findObjects(new FindListener<Comment>() {
+        BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
+        commentBmobQuery.addWhereEqualTo("commentitemid", item_id);
+        commentBmobQuery.findObjects(new FindListener<Comment>() {
             @Override
             public void done(List<Comment> object, BmobException e) {
                 if (e == null) {
@@ -113,6 +115,7 @@ public class VideoDetail extends AppCompatActivity {
 
     private void BmobInsertNewComment(Comment newcomment){
         newcomment.save(new SaveListener<String>() {
+            @SuppressLint("ShowToast")
             @Override
             public void done(String s, BmobException e) {
                 if(e == null){

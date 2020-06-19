@@ -28,6 +28,7 @@ public class MyImageView extends ImageView {
     public static final int SERVER_ERROR = 3;
     private static final String TAG = "MYIMGVIEW";
     //子线程不能操作UI，通过Handler设置图片
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
