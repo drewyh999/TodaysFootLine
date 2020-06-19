@@ -10,7 +10,8 @@
             android:layout_height="match_parent" android:background="#A6FFFFFF">
         <SearchView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:queryHint="搜索视频">
+                android:layout_height="wrap_content" android:queryHint="搜索视频" android:iconifiedByDefault="false"
+                android:id="@+id/v_search_view">
         </SearchView>
         <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
