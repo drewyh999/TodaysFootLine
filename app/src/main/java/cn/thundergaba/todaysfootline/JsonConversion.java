@@ -17,6 +17,8 @@ public class JsonConversion {
 
     public static String search_next_page;
 
+    //Add diff
+
     public static ToutiaoVideo GetVideoFromJson(String TAG,JSONObject object) throws JSONException {
             if(object.has("user_info") && object.has("video_play_info") && object.has("first_frame_image")){
                 JSONObject user_object = object.getJSONObject("user_info");
