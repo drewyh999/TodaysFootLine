@@ -45,6 +45,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import static android.view.View.GONE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -219,20 +221,25 @@ public class VideoFragment extends Fragment {
             }
         });
 
+        Button quit_search_btn = view.findViewById(R.id.v_btn_quitsearch);
+        quit_search_btn.setOnClickListener((v) -> {
+            isSearching = false;
+            tabLayout.setVisibility(View.VISIBLE);
+            buildProgressDialog(0);
+            UpdateVideoListByCategory(categories.get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()),videolist,"0");
+            quit_search_btn.setVisibility(View.GONE);
+        });
+        quit_search_btn.setVisibility(View.GONE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(!query.equals("\\quitsearch")){
+                if(!query.equals("")){
+                    //TODO Use extra button on the left top corner instead
                     isSearching = true;
                     tabLayout.setVisibility(View.GONE);
                     buildProgressDialog(0);
                     UpdateVideoListBySearchKeyword(query,videolist,"0");
-                }
-                else{
-                    isSearching = false;
-                    tabLayout.setVisibility(View.VISIBLE);
-                    buildProgressDialog(0);
-                    UpdateVideoListByCategory(categories.get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()),videolist,"0");
+                    quit_search_btn.setVisibility(View.VISIBLE);
                 }
 
                 return false;
@@ -418,8 +425,8 @@ public class VideoFragment extends Fragment {
             play_btn.setOnClickListener((v) ->{
                 video.start();
                 video.getBackground().setAlpha(0);
-                play_btn_layout.setVisibility(View.GONE);
-                title_layout.setVisibility(View.GONE);
+                play_btn_layout.setVisibility(GONE);
+                title_layout.setVisibility(GONE);
             });
 
 

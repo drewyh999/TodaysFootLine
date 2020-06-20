@@ -8,11 +8,20 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:background="#A6FFFFFF">
-        <SearchView
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:queryHint="搜索视频" android:iconifiedByDefault="false"
-                android:id="@+id/v_search_view">
-        </SearchView>
+                android:layout_height="wrap_content">
+            <Button
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content" android:id="@+id/v_btn_quitsearch"
+                    android:background="@android:drawable/ic_menu_revert"/>
+            <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:queryHint="搜索视频" android:iconifiedByDefault="false"
+                    android:id="@+id/v_search_view">
+            </SearchView>
+        </LinearLayout>
         <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/v_tablayout">
