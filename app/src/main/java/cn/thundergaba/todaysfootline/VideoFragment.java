@@ -466,6 +466,7 @@ public class VideoFragment extends Fragment {
                     Praise praise = new Praise();
                     praise.setItem_id(videoitem.getItem_id());
                     praise.setPraiserPhoneNumber(user.getMobilePhoneNumber());
+                    praise.setType("video");
                     if(holder.btn_like.isLiked()){
                         praise.delete(new UpdateListener() {
                             @Override
@@ -478,7 +479,6 @@ public class VideoFragment extends Fragment {
                                 }
                             }
                         });
-
                     }
                     else{
                         praise.save(new SaveListener<String>() {

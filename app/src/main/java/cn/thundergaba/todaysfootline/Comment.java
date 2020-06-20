@@ -16,6 +16,16 @@ public class Comment extends BmobObject {
 
     private String user_name;
 
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getUser_name() {
         return user_name;
     }

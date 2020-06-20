@@ -64,6 +64,7 @@ public class VideoDetail extends AppCompatActivity {
                 comment_item.setContent(comment_content.getText().toString());
                 comment_item.setUser_name(user.getUsername());
                 comment_item.setCommentitemid(item_id);
+                comment_item.setType("video");
                 commentAdapter.AddComment(comment_item);
                 BmobInsertNewComment(comment_item);
                 comment_content.setText("");
