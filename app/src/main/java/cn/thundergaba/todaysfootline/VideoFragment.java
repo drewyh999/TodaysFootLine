@@ -234,7 +234,6 @@ public class VideoFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(!query.equals("")){
-                    //TODO Use extra button on the left top corner instead
                     isSearching = true;
                     tabLayout.setVisibility(View.GONE);
                     buildProgressDialog(0);
