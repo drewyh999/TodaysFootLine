@@ -19,13 +19,17 @@
         android:theme="@style/AppTheme"
         android:name=".FootLineApplication">
         <activity android:name=".NewsDetail" />
-        <activity android:name=".videomoduledev" />
-        <activity android:name=".newsmoduledev">
+        <activity android:name=".VideoDetail"/>
+        <activity android:name=".videomoduledev" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".newsmoduledev">
+
         </activity>
         <activity android:name=".MainActivity" />
 
