@@ -1,6 +1,7 @@
 package cn.thundergaba.todaysfootline;
 
 import android.app.Application;
+
 import cn.bmob.v3.Bmob;
 
 public class FootLineApplication extends Application {

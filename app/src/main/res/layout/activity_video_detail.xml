@@ -71,11 +71,15 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/v_comment_edit" android:hint="输入评论内容" android:layout_marginTop="8dp"/>
+                android:id="@+id/v_comment_edit"
+                android:hint="输入评论内容"
+                android:layout_marginTop="8dp"/>
         <Button
                 android:text="发送"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/v_comment_submit"
-                android:layout_margin="5dp" android:background="@color/design_default_color_secondary"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/v_comment_submit"
+                android:layout_margin="5dp"
+                android:background="@color/design_default_color_secondary"/>
     </LinearLayout>
 </LinearLayout>
