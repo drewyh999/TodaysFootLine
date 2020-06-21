@@ -15,7 +15,7 @@ public class newsmoduledev extends AppCompatActivity implements NewsFragment.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newsmoduledev);
-        BmobUser.loginByAccount("测试员10086", "123456", new LogInListener<User>() {
+        BmobUser.loginByAccount("10086", "123456", new LogInListener<User>() {
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {

@@ -138,6 +138,7 @@ public class NewsDetail extends AppCompatActivity {
                 comment_item.setContent(comment_content.getText().toString());
                 comment_item.setUser_name(user.getUsername());
                 comment_item.setCommentitemid(item_id);
+                comment_item.setPhoneNumber(user.getMobilePhoneNumber());
                 comment_item.setType(type);
 //                commentAdapter.AddComment(comment_item);
                 BmobInsertNewComment(comment_item);
@@ -184,59 +185,5 @@ public class NewsDetail extends AppCompatActivity {
         });
     }
 
-//    public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{
-//        List<Comment> list;
-//
-//        public CommentAdapter(List<Comment> list) {
-//            this.list = list;
-//        }
-//
-//        @NonNull
-//        @Override
-//        public CommentAdapter.CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(parent.getContext())
-//                    .inflate(R.layout.commentitem,parent,false);
-//            return new CommentAdapter.CommentViewHolder(view);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull NewsDetail.CommentAdapter.CommentViewHolder holder, int position) {
-////            holder.avatar.setImageURI();
-//            //TODO Set the avatar of commentors
-//            holder.username.setText(list.get(position).getUsername());
-//            holder.content.setText(list.get(position).getContent());
-//
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return list.size();
-//        }
-//
-//        public void Refresh(){
-//            GetCommentData();
-//        }
-//
-//        public void GetCommentData(){
-//            //TODO Implement Get Comment Data
-//            notifyDataSetChanged();
-//        }
-//
-//        public class CommentViewHolder extends RecyclerView.ViewHolder{
-//
-//            ImageView avatar;
-//
-//            TextView username;
-//
-//            TextView content;
-//
-//            public CommentViewHolder(@NonNull View itemView) {
-//                super(itemView);
-//                avatar = itemView.findViewById(R.id.v_commentor_avatar);
-//                username = itemView.findViewById(R.id.v_commentor_id);
-//                content = itemView.findViewById(R.id.v_commentor_content);
-//            }
-//        }
-//    }
 
 }

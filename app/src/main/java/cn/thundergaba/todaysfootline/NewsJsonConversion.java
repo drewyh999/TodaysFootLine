@@ -11,12 +11,12 @@ public class NewsJsonConversion {
 
     public static String next_page;
 
-    public static News GetNewsFromJson(String TAG, JSONObject object){
+    public static ToutiaoNews GetNewsFromJson(String TAG, JSONObject object){
 
         try {
             if(object.has("user_info") && object.has("title" ) && object.has("publish_time")){
                 JSONObject user_object = object.getJSONObject("user_info");
-                NewsUserInfo newsUserInfo = new NewsUserInfo(user_object.getString("name")
+                TouTiaoUserInfo newsUserInfo = new TouTiaoUserInfo(user_object.getString("name")
                         ,user_object.getString("avatar_url"));
 //                String main_url_encoded = video_info_object.getJSONObject("video_list")
 //                        .getJSONObject("video_2")
@@ -26,12 +26,12 @@ public class NewsJsonConversion {
                 String title = new String(object.getString("title"));
                 String item_id = new String(object.getString("item_id"));
                 Date publish_time = new Date(object.getInt("publish_time"));
-                News result = new News();
+                ToutiaoNews result = new ToutiaoNews();
                 result.setTitle(title);
                 result.setIs_liked(false);
-                result.setNewsUserInfo(newsUserInfo);
-                result.setNewsItem_id(item_id);
-                result.setNewsPublishTime(publish_time);
+                result.setUserInfo(newsUserInfo);
+                result.setItem_id(item_id);
+                result.setPublishTime(publish_time);
                 return result;
             }
             else{

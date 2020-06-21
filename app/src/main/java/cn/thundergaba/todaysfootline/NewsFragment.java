@@ -5,9 +5,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,8 +14,6 @@ import android.widget.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
-import com.like.LikeButton;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import org.json.JSONArray;
@@ -36,19 +30,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -283,10 +270,10 @@ public class NewsFragment extends Fragment {
                     JSONArray news_object_array = root_object.getJSONArray("data");
                     nview.post(() -> {
                         try {
-                            List<News> newslist = new ArrayList<>();
+                            List<ToutiaoNews> newslist = new ArrayList<>();
                             for (int i = 0; i < news_object_array.length(); i++) {
                                 JSONObject newsobject = news_object_array.getJSONObject(i);
-                                News news = NewsSearchJsonConversion.GetNewsFromSearchJson(TAG,newsobject);
+                                ToutiaoNews news = NewsSearchJsonConversion.GetNewsFromSearchJson(TAG,newsobject);
                                 if(news != null) {
                                     newslist.add(news);
                                 }
@@ -328,10 +315,10 @@ public class NewsFragment extends Fragment {
                     JSONArray news_object_array = root_object.getJSONArray("data");
                     nview.post(() -> {
                         try {
-                            List<News> newslist = new ArrayList<>();
+                            List<ToutiaoNews> newslist = new ArrayList<>();
                             for (int i = 0; i < news_object_array.length(); i++) {
                                 JSONObject newsobject = news_object_array.getJSONObject(i);
-                                News news = NewsJsonConversion.GetNewsFromJson(TAG,newsobject);
+                                ToutiaoNews news = NewsJsonConversion.GetNewsFromJson(TAG,newsobject);
                                 if(news != null) {
                                     newslist.add(news);
                                 }
@@ -360,11 +347,11 @@ public class NewsFragment extends Fragment {
 
 
     public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewholder>{
-        List<News> list;
+        List<ToutiaoNews> list;
 
         Activity activity;
 
-        public NewsItemAdapter(List<News> list, Activity activity){
+        public NewsItemAdapter(List<ToutiaoNews> list, Activity activity){
             this.list = list;
             this.activity = activity;
         }
@@ -384,16 +371,16 @@ public class NewsFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull NewsViewholder holder, int position) {
             // TODO user avatar is not correctly loaded
-            NewsItem newsItem = list.get(position);
-            holder.avatar.setImageURL(newsItem.getNewsUserInfo().getAvatar_url());
-            holder.user.setText(list.get(position).getNewsUserInfo().getName());
+            ToutiaoNews newsItem = list.get(position);
+            holder.avatar.setImageURL(newsItem.getUserInfo().getAvatar_url());
+            holder.user.setText(list.get(position).getUserInfo().getName());
             holder.news.setText(list.get(position).getTitle());
             holder.news.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String title = newsItem.getTitle();
-                    String item_id = newsItem.getNewsItem_id();
-                    String source = newsItem.getNewsUserInfo().getName();
+                    String item_id = newsItem.getItem_id();
+                    String source = newsItem.getUserInfo().getName();
                     String praiserPhoneNumber = user.getMobilePhoneNumber();
                     new Thread(() -> {
                         try {
@@ -445,7 +432,7 @@ public class NewsFragment extends Fragment {
             return list.size();
         }
 
-        public void ConcatenateNewsList(List<News> next_page_news){
+        public void ConcatenateNewsList(List<ToutiaoNews> next_page_news){
             list.addAll(next_page_news);
             notifyDataSetChanged();
         }

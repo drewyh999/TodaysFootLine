@@ -65,6 +65,7 @@ public class VideoDetail extends AppCompatActivity {
                 comment_item.setUser_name(user.getUsername());
                 comment_item.setCommentitemid(item_id);
                 comment_item.setType("video");
+                comment_item.setPhoneNumber(user.getMobilePhoneNumber());
                 commentAdapter.AddComment(comment_item);
                 BmobInsertNewComment(comment_item);
                 comment_content.setText("");
@@ -153,7 +154,7 @@ public class VideoDetail extends AppCompatActivity {
             holder.avatar.setImageURI(Uri.parse(list.get(position).getUser_avatar()));
             holder.username.setText(list.get(position).getUser_name());
             holder.content.setText(list.get(position).getContent());
-
+            //TODO Add the time of comment
         }
 
         @Override
