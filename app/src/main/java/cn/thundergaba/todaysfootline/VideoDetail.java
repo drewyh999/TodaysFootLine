@@ -21,6 +21,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class VideoDetail extends AppCompatActivity {
@@ -150,11 +151,14 @@ public class VideoDetail extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-            //TODO Commenter's avatar not correctly displayed
-            holder.avatar.setImageURI(Uri.parse(list.get(position).getUser_avatar()));
+            HashMap<Integer, Integer> picturemap = new HashMap<Integer, Integer>();
+            picturemap.put(R.id.imageView2, R.drawable.picture1);
+            picturemap.put(R.id.imageView3, R.drawable.picture2);
+            Integer pictureid=Integer.parseInt(list.get(position).getUser_avatar());
+            Integer picturesource = picturemap.get(pictureid);
+            holder.avatar.setImageDrawable(getResources().getDrawable(picturesource));
             holder.username.setText(list.get(position).getUser_name());
             holder.content.setText(list.get(position).getContent());
-            //TODO Add the time of comment
         }
 
         @Override
