@@ -16,6 +16,16 @@ public class Comment extends BmobObject {
 
     private String type;
 
+    private String phoneNumber;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getType(){return type;}
 
     public void setType(String type){this.type = type;}
