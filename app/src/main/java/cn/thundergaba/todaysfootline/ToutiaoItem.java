@@ -11,6 +11,9 @@ public class ToutiaoItem {
 
     private String title;
 
+    public ToutiaoItem() {
+    }
+
     public String getTitle() {
         return title;
     }
