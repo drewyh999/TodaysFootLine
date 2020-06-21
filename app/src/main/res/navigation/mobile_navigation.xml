@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@id/newsfragment">
+
+<!--    <fragment-->
+<!--            android:id="@+id/navigation_home"-->
+<!--            android:name="cn.thundergaba.todaysfootline.ui.home.HomeFragment"-->
+<!--            android:label="@string/title_home"-->
+<!--            tools:layout="@layout/fragment_home"/>-->
+
+<!--    <fragment-->
+<!--            android:id="@+id/navigation_dashboard"-->
+<!--            android:name="cn.thundergaba.todaysfootline.ui.dashboard.DashboardFragment"-->
+<!--            android:label="@string/title_dashboard"-->
+<!--            tools:layout="@layout/fragment_dashboard"/>-->
+
+<!--    <fragment-->
+<!--            android:id="@+id/navigation_notifications"-->
+<!--            android:name="cn.thundergaba.todaysfootline.ui.notifications.NotificationsFragment"-->
+<!--            android:label="@string/title_notifications"-->
+<!--            tools:layout="@layout/fragment_notifications"/>-->
+    <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:label="新闻"
+            android:name="cn.thundergaba.todaysfootline.NewsFragment"
+            android:id="@+id/newsfragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    <fragment
+            android:layout_width="match_parent"
+            android:label="视频"
+            android:layout_height="wrap_content" android:name="cn.thundergaba.todaysfootline.VideoFragment"
+            android:id="@+id/videofragment" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    <fragment
+            android:id="@+id/personalinfofragment"
+            android:name="cn.thundergaba.todaysfootline.PersonFragment"
+            android:label="个人信息"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_person" />
+
+</navigation>
