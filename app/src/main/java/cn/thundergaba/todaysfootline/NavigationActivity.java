@@ -25,16 +25,16 @@ public class NavigationActivity extends AppCompatActivity implements VideoFragme
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.newsfragment, R.id.videofragment, R.id.personalinfofragment)
                 .build();
-        BmobUser.loginByAccount("测试员10086", "123456", new LogInListener<User>() {
-            @Override
-            public void done(User user, BmobException e) {
-                if (e == null) {
-
-                } else {
-                    Log.d("BMOB" , e.toString());
-                }
-            }
-        });
+//        BmobUser.loginByAccount("测试员10086", "123456", new LogInListener<User>() {
+//            @Override
+//            public void done(User user, BmobException e) {
+//                if (e == null) {
+//
+//                } else {
+//                    Log.d("BMOB" , e.toString());
+//                }
+//            }
+//        });
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
