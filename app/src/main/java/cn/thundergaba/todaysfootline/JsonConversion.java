@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import java.util.Date;
 
 public class JsonConversion {
+    public static String next_page;
+
     public static ToutiaoVideo GetVideoFromJson(String TAG,JSONObject object){
 
         try {
@@ -23,7 +25,7 @@ public class JsonConversion {
                                             .getJSONObject("video_1")
                                             .getString("main_url");
                 String main_url_decoded = new String(Base64.decode(main_url_encoded, Base64.DEFAULT));
-                Log.d(TAG,"DECODED URL:" + main_url_decoded);
+                Log.d(TAG,"DECODED PLAY URL:" + main_url_decoded);
                 String item_id = new JSONObject(object.getString("pread_params")).getString("item_id");
                 Date publish_date = new Date(object.getInt("publish_time"));
                 String first_frame_pic_url = object.getJSONObject("first_frame_image").getString("url");

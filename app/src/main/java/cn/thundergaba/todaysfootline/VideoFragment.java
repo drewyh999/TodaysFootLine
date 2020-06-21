@@ -1,6 +1,8 @@
 package cn.thundergaba.todaysfootline;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import com.google.android.material.tabs.TabLayout;
 import com.like.LikeButton;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -36,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import static android.view.View.GONE;
 
 
 /**
@@ -54,13 +64,20 @@ public class VideoFragment extends Fragment {
 
     private final String TAG = "VIDEO_FRAGMENT";
 
+    private ProgressDialog progressDialog;
 
     private String mParam1;
     private String mParam2;
 
     private HashMap<String,String> categories;
 
+    private VideoItemAdapter videoItemAdapter;
+
     private OnFragmentInteractionListener mListener;
+
+    private boolean isSearching = false;//Indicate if search mode is applied
+
+    private User user;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -110,6 +127,23 @@ public class VideoFragment extends Fragment {
         categories.put("军事","subv_xg_military");
     }
 
+    public void buildProgressDialog(int id) {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        progressDialog.setMessage("正在载入");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    public void cancelProgressDialog() {
+        if (progressDialog != null)
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,12 +157,16 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_video_view, container, false);
         InitCategories();
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
         LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
+        SearchView searchView = view.findViewById(R.id.v_search_view);
         videolist.setLayoutManager(video_list_manager);
-        UpdateVideoListByCategory("video_new",videolist,"0");
+        if(BmobUser.isLogin()) {
+            user = BmobUser.getCurrentUser(User.class);
+        }
         TabLayout tabLayout = view.findViewById(R.id.v_tablayout);
         for(String key:categories.keySet()){
             TabLayout.Tab tab =tabLayout.newTab();
@@ -139,6 +177,7 @@ public class VideoFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                buildProgressDialog(0);
                 UpdateVideoListByCategory(categories.get(tab.getText().toString()),videolist,"0");
             }
 
@@ -153,15 +192,64 @@ public class VideoFragment extends Fragment {
             }
         });
         tabLayout.setSelected(true);
+        buildProgressDialog(0);
+        UpdateVideoListByCategory(categories.get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()),videolist,"0");
         SmartRefreshLayout smartRefreshLayout = view.findViewById(R.id.refreshLayout);
-        smartRefreshLayout.setOnRefreshListener((v) ->{
-            smartRefreshLayout.finishRefresh(2000);
-            String category = tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString();
-            Log.d(TAG,"THE SELECTED TAB TEXT IS " + category);
-            UpdateVideoListByCategory(categories.get(category),videolist,"0");
-
+        smartRefreshLayout.setOnRefreshListener((v) -> {
+            if(!isSearching) {
+                smartRefreshLayout.finishRefresh(2000);
+                String category = tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString();
+                Log.d(TAG, "THE SELECTED TAB TEXT IS " + category);
+                UpdateVideoListByCategory(categories.get(category), videolist, "0");
+            }
+            else{
+                smartRefreshLayout.finishLoadMore(2000);
+                String keyword = searchView.getQuery().toString();
+                UpdateVideoListBySearchKeyword(keyword,videolist,"0");
+            }
         });
-        //TODO implement load more
+        smartRefreshLayout.setOnLoadMoreListener((v) -> {
+            if(!isSearching) {
+                smartRefreshLayout.finishLoadMore(2000);
+                String category = tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString();
+                UpdateVideoListByCategory(categories.get(category), videolist, JsonConversion.next_page);
+            }
+            else{
+                smartRefreshLayout.finishLoadMore(2000);
+                String keyword = searchView.getQuery().toString();
+                UpdateVideoListBySearchKeyword(keyword,videolist,JsonConversion.search_next_page);
+            }
+        });
+
+        Button quit_search_btn = view.findViewById(R.id.v_btn_quitsearch);
+        quit_search_btn.setOnClickListener((v) -> {
+            isSearching = false;
+            tabLayout.setVisibility(View.VISIBLE);
+            buildProgressDialog(0);
+            UpdateVideoListByCategory(categories.get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()),videolist,"0");
+            quit_search_btn.setVisibility(View.GONE);
+        });
+        quit_search_btn.setVisibility(View.GONE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(!query.equals("")){
+                    isSearching = true;
+                    tabLayout.setVisibility(View.GONE);
+                    buildProgressDialog(0);
+                    UpdateVideoListBySearchKeyword(query,videolist,"0");
+                    quit_search_btn.setVisibility(View.VISIBLE);
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -203,6 +291,12 @@ public class VideoFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Update the video list by selected category
+     * @param category the String indicate the category
+     * @param rview the recycler view to apply change
+     * @param page the page to update
+     */
     private void UpdateVideoListByCategory(String category,RecyclerView rview,String page) {
 
         final String reqString = "https://api03.6bqb.com/xigua/app/categoryVideo?apikey=B10A922C01D27BB7EEDB02717A72BDA1&category=" + category + "&page=" + page;
@@ -216,31 +310,80 @@ public class VideoFragment extends Fragment {
                 Response response = null;
                 response = client.newCall(request).execute();//得到Response 对象
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "response.code()==" + response.code());
-                    Log.d(TAG, "response.message()==" + response.message());
                     String responsestring = response.body().string();
                     Log.d(TAG, "res==" + responsestring);
-                    //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                     JSONObject root_object = new JSONObject(responsestring);
+                    JsonConversion.next_page = root_object.getString("page");
+                    Log.d(TAG,"NEXT RESULT PAGE IS " + JsonConversion.next_page);
                     JSONArray video_object_array = root_object.getJSONArray("data");
+                    List<ToutiaoVideo> newlist = new ArrayList<>();
+                    for (int i = 0; i < video_object_array.length(); i++) {
+                        JSONObject videoobject = video_object_array.getJSONObject(i);
+                        ToutiaoVideo video = JsonConversion.GetVideoFromJson(TAG,videoobject);
+                        if(video != null) {
+                            newlist.add(video);
+                        }
+                    }
                     rview.post(() -> {
-                            try {
-                                List<ToutiaoVideo> newlist = new ArrayList<>();
-                                for (int i = 0; i < video_object_array.length(); i++) {
-                                    JSONObject videoobject = video_object_array.getJSONObject(i);
-                                    ToutiaoVideo video = JsonConversion.GetVideoFromJson(TAG,videoobject);
-                                    if(video != null) {
-                                        newlist.add(video);
-                                    }
-                                }
-                                VideoItemAdapter adapter;
-                                adapter = new VideoItemAdapter(newlist,getActivity());
-                                rview.setAdapter(adapter);
+                        if(page.equals("0")) {
+                            videoItemAdapter = new VideoItemAdapter(newlist, getActivity());
+                            rview.setAdapter(videoItemAdapter);
+                        }
+                        else{
+                            videoItemAdapter.ConcatenateVideoList(newlist);
+                        }
+                        cancelProgressDialog();
+                    });
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                Log.d(TAG, e.toString());
+            }
+        }).start();
+    }
 
-                            } catch (JSONException e) {
-                                Log.d(TAG, e.getMessage());
-                                e.printStackTrace();
-                            }
+    /**
+     * Update the video list with the search results
+     * @param keyword the keyword for searching
+     * @param rview the recycler view to apply change
+     * @param page the page to update
+     */
+    private void UpdateVideoListBySearchKeyword(String keyword,RecyclerView rview,String page){
+        final String reqString = "https://api03.6bqb.com/xigua/app/generalSearch?apikey=B10A922C01D27BB7EEDB02717A72BDA1&keyword=" + keyword + "&page=" + page;
+        new Thread(() -> {
+            try {
+
+                OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
+                Request request = new Request.Builder()
+                        .url(reqString)//请求接口。如果需要传参拼接到接口后面。
+                        .build();
+                Response response = null;
+                response = client.newCall(request).execute();//得到Response 对象
+                if (response.isSuccessful()) {
+                    String responsestring = response.body().string();
+                    Log.d(TAG, "res==" + responsestring);
+                    JSONObject root_object = new JSONObject(responsestring);
+                    JsonConversion.SearchPageConversion(root_object.getString("page"));
+                    Log.d(TAG,"NEXT SEARCH RESULT PAGE IS " + JsonConversion.search_next_page);
+                    JSONArray video_object_array = root_object.getJSONArray("data");
+                    //TODO Empty results?
+                    List<ToutiaoVideo> newlist = new ArrayList<>();
+                    for (int i = 0; i < video_object_array.length(); i++) {
+                        JSONObject videoobject = video_object_array.getJSONObject(i);
+                        ToutiaoVideo video = JsonConversion.GetVideoSearchResultFromJson(TAG,videoobject);
+                        if(video != null) {
+                                newlist.add(video);
+                        }
+                    }
+                    rview.post(() -> {
+                        if(page.equals("0")) {
+                            videoItemAdapter = new VideoItemAdapter(newlist, getActivity());
+                            rview.setAdapter(videoItemAdapter);
+                        }
+                        else{
+                            videoItemAdapter.ConcatenateVideoList(newlist);
+                        }
+                        cancelProgressDialog();
                     });
                 }
             } catch (IOException | JSONException e) {
@@ -259,6 +402,7 @@ public class VideoFragment extends Fragment {
             this.list = list;
             this.activity = activity;
         }
+        @SuppressLint("ShowToast")
         @NonNull
         @Override
         public VideoViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -268,30 +412,31 @@ public class VideoFragment extends Fragment {
             VideoView video = view.findViewById(R.id.vid_v_itemvideoview);
             Button play_btn = view.findViewById(R.id.v_play_btn);
             ConstraintLayout play_btn_layout = view.findViewById(R.id.v_video_cover);
+            ConstraintLayout title_layout = view.findViewById(R.id.v_title_layout);
 //            video.setMediaController(new MediaController(getContext()));
             video.setOnClickListener((v) ->{
                 if(video.isPlaying()){
                     video.pause();
                     play_btn_layout.setVisibility(View.VISIBLE);
+                    title_layout.setVisibility(View.VISIBLE);
                 }
             });
             play_btn.setOnClickListener((v) ->{
                 video.start();
                 video.getBackground().setAlpha(0);
-                play_btn_layout.setVisibility(View.GONE);
+                play_btn_layout.setVisibility(GONE);
+                title_layout.setVisibility(GONE);
             });
 
 
             LikeButton btn_like = view.findViewById(R.id.btn_v_like);
-            btn_like.setOnClickListener((v) ->{
 
-            });
-            //TODO Get the user information and do the like
 
 
             return holder;
         }
 
+        @SuppressLint("ShowToast")
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void onBindViewHolder(@NonNull VideoViewholder holder, int position) {
@@ -299,6 +444,59 @@ public class VideoFragment extends Fragment {
             holder.avatar.setImageURL(videoitem.getUserInfo().getAvatar_url());
             holder.user.setText(videoitem.getUserInfo().getName());
             holder.video.setVideoPath(videoitem.getPlay_url());
+            holder.title.setText(videoitem.getTitle());
+            if(BmobUser.isLogin()) {
+                BmobQuery<Praise> praiseBmobQuery = new BmobQuery<>();
+                praiseBmobQuery.addWhereEqualTo("item_id", videoitem.getItem_id());
+                praiseBmobQuery.addWhereEqualTo("praiserPhoneNumber",user.getMobilePhoneNumber());
+                praiseBmobQuery.findObjects(new FindListener<Praise>() {
+                    @Override
+                    public void done(List<Praise> object, BmobException e) {
+                        if (e == null && object.size() != 0) {
+                            holder.btn_like.setLiked(true);
+                            Log.d(TAG, "PRAISE INFO FETCHED FOR" + object.get(0).getItem_id());
+                        } else {
+                            Log.e(TAG, e.getMessage());
+                        }
+                    }
+                });
+            }
+            holder.btn_like.setOnClickListener((v) ->{
+                if (BmobUser.isLogin()) {
+                    Praise praise = new Praise();
+                    praise.setItem_id(videoitem.getItem_id());
+                    praise.setPraiserPhoneNumber(user.getMobilePhoneNumber());
+                    praise.setType("video");
+                    if(holder.btn_like.isLiked()){
+                        praise.delete(new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if(e == null){
+                                    holder.btn_like.setLiked(false);
+                                }
+                                else{
+                                    Log.e(TAG,e.toString());
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        praise.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if(e == null){
+                                    holder.btn_like.setLiked(true);
+                                }
+                                else{
+                                    Log.e(TAG,e.toString());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(getActivity(),"未登陆不可点赞",Toast.LENGTH_SHORT);
+                }
+            });
             holder.btn_comment.setOnClickListener((v) ->{
                 String item_id = videoitem.getItem_id();
                 String play_url = videoitem.getPlay_url();
@@ -338,10 +536,18 @@ public class VideoFragment extends Fragment {
             }).start();
         }
 
-
         @Override
         public int getItemCount() {
             return list.size();
+        }
+
+        /**
+         * For loading more video, add the videos of next page to the tail of video list
+         * @param next_page_video the list of added video
+         */
+        public void ConcatenateVideoList(List<ToutiaoVideo> next_page_video){
+            list.addAll(next_page_video);
+            notifyDataSetChanged();
         }
 
         public class VideoViewholder extends RecyclerView.ViewHolder{
@@ -350,6 +556,8 @@ public class VideoFragment extends Fragment {
             VideoView video;
             ConstraintLayout layout;
             Button btn_comment;
+            LikeButton btn_like;
+            TextView title;
             public VideoViewholder(@NonNull View itemView) {
                 super(itemView);
                 avatar = itemView.findViewById(R.id.img_v_avatar);
@@ -357,9 +565,10 @@ public class VideoFragment extends Fragment {
                 video = itemView.findViewById(R.id.vid_v_itemvideoview);
                 layout = itemView.findViewById(R.id.v_video_cover);
                 btn_comment = itemView.findViewById(R.id.btn_v_comment);
+                title = itemView.findViewById(R.id.v_video_title);
+                btn_like = itemView.findViewById(R.id.btn_v_like);
             }
         }
-
 
     }
 
