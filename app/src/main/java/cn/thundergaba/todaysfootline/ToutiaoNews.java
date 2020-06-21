@@ -1,6 +1,6 @@
 package cn.thundergaba.todaysfootline;
 
-public class News extends NewsItem {
+public class ToutiaoNews extends ToutiaoItem {
 
     private boolean is_liked;//是否被当前用户点赞
 

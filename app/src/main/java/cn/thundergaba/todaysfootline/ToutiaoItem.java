@@ -9,6 +9,16 @@ public class ToutiaoItem {
 
     private Date PublishTime;
 
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getItem_id() {
         return item_id;
     }
