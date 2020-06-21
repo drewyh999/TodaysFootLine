@@ -13,6 +13,7 @@ import cn.bmob.v3.listener.SaveListener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Picture;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +51,7 @@ public class FirstChoose extends Activity {
                     Intent intent_Login_to_Register=new Intent(FirstChoose.this,Register.class);
                     startActivity(intent_Login_to_Register);
                     finish();
+
                     break;
                 case R.id.login:
                     login(view);
@@ -75,9 +77,16 @@ public class FirstChoose extends Activity {
                     if (e == null) {
                         User user = BmobUser.getCurrentUser(User.class);
                         Snackbar.append("登录成功：" + user.getUsername());
-                        Intent intent_FirstChoose_to_VideoFragment=new Intent(FirstChoose.this, videomoduledev.class);
-                        startActivity(intent_FirstChoose_to_VideoFragment);
-                        finish();
+//                        Intent intent_FirstChoose_to_VideoFragment = new Intent(FirstChoose.this, PictureChoose.class);
+//                        startActivity(intent_FirstChoose_to_VideoFragment);
+//                        finish();
+                        if (user.getAvatar()==null) {
+                            Intent intent_FirstChoose_to_VideoFragment = new Intent(FirstChoose.this, PictureChoose.class);
+                            startActivity(intent_FirstChoose_to_VideoFragment);
+                            finish();
+                        }else{
+                            startActivity(new Intent(FirstChoose.this,personmoduledev.class));
+                        }
                     } else {
                         Snackbar.append("登录失败：" + e.getMessage()+ "\n");
                     }

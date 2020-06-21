@@ -50,7 +50,6 @@ public class Register extends AppCompatActivity {
     };
     public void register_send(){
         String phone = mAccount.getText().toString().trim();
-        String code = mPwd.getText().toString().trim();
         BmobSMS.requestSMSCode(phone, "今日脚条", new QueryListener<Integer>() {
             @Override
             public void done(Integer smsId, BmobException e) {
@@ -70,23 +69,12 @@ public class Register extends AppCompatActivity {
             public void done(BmobException e) {
                 if (e == null) {
                     mTvInfo.append("验证码验证成功，您可以在此时进行绑定操作！\n");
-
-                    User user = new User();
-                    user.setMobilePhoneNumber(phone);
-                    user.setPassword("123456");
-                    user.setUsername("测试员10086");
-                    user.signOrLogin(code, new SaveListener<User>() {
-
-                        @Override
-                        public void done(User user,BmobException e) {
-                            if (e == null) {
-                                mTvInfo.append("短信注册或登录成功：" + user.getUsername());
-                                startActivity(new Intent(Register.this, FirstChoose.class));
-                            } else {
-                                mTvInfo.append("短信注册或登录失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
-                            }
-                        }
-                    });
+                    Intent intent = new Intent(Register.this,InputInfo.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("phonenumber",phone);
+                    bundle.putString("code",code);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }else {
                     mTvInfo.append("验证码验证失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
                 }
