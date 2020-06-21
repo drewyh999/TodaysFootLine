@@ -18,7 +18,7 @@
 
         </activity>
 
-        <activity android:name=".newsmoduledev">
+        <activity android:name=".personmoduledev">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,8 +27,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+        <activity android:name=".ChangeInfo" />
+        <activity android:name=".FirstChoose" />
+        <activity android:name=".PictureAll" />
+        <activity android:name=".PictureChoose" />
+        <activity android:name=".ShowComment" />
+        <activity android:name=".ShowPraise" />
+        <activity android:name=".Register" />
         <activity android:name=".InputInfo" />
-        <activity android:name=".personmoduledev" />
+        <activity android:name=".newsmoduledev" />
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
