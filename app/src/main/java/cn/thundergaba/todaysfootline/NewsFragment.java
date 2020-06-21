@@ -35,7 +35,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -378,10 +381,16 @@ public class NewsFragment extends Fragment {
             holder.news.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String praiserPhoneNumber;
                     String title = newsItem.getTitle();
                     String item_id = newsItem.getItem_id();
                     String source = newsItem.getUserInfo().getName();
-                    String praiserPhoneNumber = user.getMobilePhoneNumber();
+                    if(!(BmobUser.isLogin())) {
+                        praiserPhoneNumber = null;
+                    }else{
+                        praiserPhoneNumber = user.getMobilePhoneNumber();
+                    }
+                    //String praiserPhoneNumber = user.getMobilePhoneNumber();
                     new Thread(() -> {
                         try {
 

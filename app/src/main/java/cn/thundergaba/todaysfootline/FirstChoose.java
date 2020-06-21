@@ -85,7 +85,7 @@ public class FirstChoose extends Activity {
                             startActivity(intent_FirstChoose_to_VideoFragment);
                             finish();
                         }else{
-                            startActivity(new Intent(FirstChoose.this,personmoduledev.class));
+                            startActivity(new Intent(FirstChoose.this,NavigationActivity.class));
                         }
                     } else {
                         Snackbar.append("登录失败：" + e.getMessage()+ "\n");

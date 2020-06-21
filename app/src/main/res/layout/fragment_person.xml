@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/PersonalPhoto"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="195dp"
             android:src="@android:drawable/ic_menu_gallery" />
 
         <TextView
