@@ -13,7 +13,7 @@ public class ShowComment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_comment);
+        //setContentView(R.layout.activity_show_comment);
         User user = BmobUser.getCurrentUser(User.class);
 
 
