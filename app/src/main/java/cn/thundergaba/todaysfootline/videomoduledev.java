@@ -1,6 +1,7 @@
 package cn.thundergaba.todaysfootline;
 
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,9 @@ public class videomoduledev extends AppCompatActivity implements VideoFragment.O
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {
+
                 } else {
+                    Log.d("BMOB" , e.toString());
                 }
             }
         });

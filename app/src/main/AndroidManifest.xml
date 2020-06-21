@@ -9,15 +9,17 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ShowComment"></activity>
-        <activity android:name=".ShowPraise" />
-        <activity android:name=".videomoduledev" />
-        <activity android:name=".PictureAll" />
-        <activity android:name=".PictureChoose" />
-        <activity android:name=".ChangeInfo" />
-        <activity android:name=".Register" />
-        <activity android:name=".FirstChoose">
+
+        android:theme="@style/AppTheme"
+        android:name=".FootLineApplication">
+        <activity android:name=".NewsDetail" />
+        <activity android:name=".VideoDetail"/>
+        <activity android:name=".videomoduledev" >
+
+        </activity>
+
+        <activity android:name=".newsmoduledev">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

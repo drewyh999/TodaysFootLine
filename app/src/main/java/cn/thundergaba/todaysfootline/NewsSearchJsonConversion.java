@@ -11,11 +11,11 @@ public class NewsSearchJsonConversion {
 
     public static String next_page;
 
-    public static News GetNewsFromSearchJson(String TAG, JSONObject object){
+    public static ToutiaoNews GetNewsFromSearchJson(String TAG, JSONObject object){
 
         try {
             if(object.has("media_avatar_url") && object.has("title" ) && object.has("publish_time")){
-                NewsUserInfo newsUserInfo = new NewsUserInfo(object.getString("source")
+                TouTiaoUserInfo newsUserInfo = new TouTiaoUserInfo(object.getString("source")
                         ,object.getString("media_avatar_url"));
 //                String main_url_encoded = video_info_object.getJSONObject("video_list")
 //                        .getJSONObject("video_2")
@@ -25,12 +25,12 @@ public class NewsSearchJsonConversion {
                 String title = new String(object.getString("title"));
                 String item_id = new String(object.getString("item_id"));
                 Date publish_time = new Date(object.getInt("publish_time"));
-                News result = new News();
+                ToutiaoNews result = new ToutiaoNews();
                 result.setTitle(title);
                 result.setIs_liked(false);
-                result.setNewsUserInfo(newsUserInfo);
-                result.setNewsItem_id(item_id);
-                result.setNewsPublishTime(publish_time);
+                result.setUserInfo(newsUserInfo);
+                result.setItem_id(item_id);
+                result.setPublishTime(publish_time);
                 return result;
             }
             else{

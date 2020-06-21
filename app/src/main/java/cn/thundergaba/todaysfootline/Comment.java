@@ -6,8 +6,6 @@ import cn.bmob.v3.datatype.BmobDate;
 public class Comment extends BmobObject {
     private String commentitemid;
 
-    private String authorPhoneNumber;
-
     private BmobDate ctime;
 
     private String content;
@@ -17,6 +15,16 @@ public class Comment extends BmobObject {
     private String user_name;
 
     private String type;
+
+    private String phoneNumber;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getType(){return type;}
 
@@ -44,14 +52,6 @@ public class Comment extends BmobObject {
 
     public void setCommentitemid(String commentitemid) {
         this.commentitemid = commentitemid;
-    }
-
-    public String getAuthorPhoneNumber() {
-        return authorPhoneNumber;
-    }
-
-    public void setAuthorPhoneNumber(String authorPhoneNumber) {
-        this.authorPhoneNumber = authorPhoneNumber;
     }
 
     public BmobDate getCtime() {
