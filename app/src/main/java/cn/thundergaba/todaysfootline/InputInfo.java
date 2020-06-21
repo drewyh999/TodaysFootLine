@@ -55,7 +55,7 @@ public class InputInfo extends AppCompatActivity {
                 @Override
                 public void done(User user,BmobException e) {
                     if (e == null) {
-                        mTvInfo.append("短信注册或登录成功：" + user.getUsername());
+                        mTvInfo.append("短信注册成功：" + user.getUsername());
                         Intent intent = new Intent(InputInfo.this,FirstChoose.class);
 //                        Bundle bundle = new Bundle();
 //                        bundle.putString("phonenumber",phone);
@@ -63,7 +63,9 @@ public class InputInfo extends AppCompatActivity {
 //                        intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
-                        mTvInfo.append("短信注册或登录失败：" +code+ e.getErrorCode() + "-" + e.getMessage() + "\n");
+                        mTvInfo.append("账号已存在或网络故障"  + "\n");
+                        Intent intent = new Intent(InputInfo.this,FirstChoose.class);
+                        startActivity(intent);
                     }
                 }
             });
@@ -83,6 +85,10 @@ public class InputInfo extends AppCompatActivity {
             return false;
         }else if(mconfirmpwd.getText().toString().trim().equals("")) {
             Toast.makeText(this, getString(R.string.pwd_check_empty),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!muserpwd.getText().toString().trim().equals(mconfirmpwd.getText().toString().trim())){
+            Toast.makeText(this, "两次密码不一致",
                     Toast.LENGTH_SHORT).show();
             return false;
         }

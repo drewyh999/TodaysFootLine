@@ -15,6 +15,7 @@ import okhttp3.Response;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class ShowComment extends AppCompatActivity {
             User user = BmobUser.getCurrentUser(User.class);
             BmobQuery<Comment> commentBmobQuery=new BmobQuery<>();
             commentBmobQuery.addWhereEqualTo("phoneNumber",user.getMobilePhoneNumber());
+            buildProgressDialog(0);
             commentBmobQuery.findObjects(new FindListener<Comment>() {
                 @Override
                 public void done(List<Comment> list, BmobException e) {
@@ -71,6 +73,7 @@ public class ShowComment extends AppCompatActivity {
                             }
                         }
                     }
+                    cancelProgressDialog();
                 }
             });
         }
@@ -108,7 +111,7 @@ public class ShowComment extends AppCompatActivity {
                             ToutiaoNews news = new ToutiaoNews();
                             news.setTitle(title);
                             news.setUserInfo(source);
-
+                            news.setItem_id(news_id);
                             if (news != null) {
                                 newslist.add(news);
                             }
@@ -129,6 +132,26 @@ public class ShowComment extends AppCompatActivity {
         Thread.sleep(2000);
     }
 
+
+
+
+    private ProgressDialog progressDialog;
+    public void buildProgressDialog(int id) {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(ShowComment.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        progressDialog.setMessage("正在载入");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    public void cancelProgressDialog() {
+        if (progressDialog != null)
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+    }
 
 
 

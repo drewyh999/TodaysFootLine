@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -65,11 +66,14 @@ public class ShowPraise extends AppCompatActivity {
             User user = BmobUser.getCurrentUser(User.class);
             BmobQuery<Praise> praiseBmobQuery = new BmobQuery<>();
             praiseBmobQuery.addWhereEqualTo("praiserPhoneNumber", user.getMobilePhoneNumber());
+            buildProgressDialog(0);
             //praiseBmobQuery.addQueryKeys("item_id");
             praiseBmobQuery.findObjects(new FindListener<Praise>() {
                 @Override
                 public void done(List<Praise> list, BmobException e) {
+
                     for (int j = 0; j < list.size(); j++) {
+
                         if (list.get(j).getType() == "video") {
                             //j++;
                             //showvideo(mview, list.get(j).getItem_id());
@@ -77,13 +81,16 @@ public class ShowPraise extends AppCompatActivity {
                         } else {
                             //praise_list.add(list.get(j).getItem_id());
                             try {
+
                                 shownews(mview,list.get(j).getItem_id());
+
                             } catch (InterruptedException ex) {
                                 ex.printStackTrace();
                             }
                         }
                     }
-                    //shownews(mview, praise_list);
+                    cancelProgressDialog();
+
                 }
             });
         }
@@ -94,6 +101,7 @@ public class ShowPraise extends AppCompatActivity {
     public void shownews(RecyclerView nview, String news_id) throws InterruptedException {
         new Thread(()->{
             try{
+
                 //for (int i=0;i<news_list.size();i++){
                     //String news_id=news_list.get(i);
                     final String searchString = "https://api03.6bqb.com/toutiao/detail?apikey=B10A922C01D27BB7EEDB02717A72BDA1&itemId=" + news_id;
@@ -120,7 +128,7 @@ public class ShowPraise extends AppCompatActivity {
                             ToutiaoNews news = new ToutiaoNews();
                             news.setTitle(title);
                             news.setUserInfo(source);
-
+                            news.setItem_id(news_id);
                             if (news != null) {
                                 newslist.add(news);
                             }
@@ -146,54 +154,25 @@ public class ShowPraise extends AppCompatActivity {
 
 
 
-//    public void shownews(RecyclerView nview, List<Praise> newslist) {
-//
-//        new Thread(() -> {
-//            try {
-//                final String searchString = "https://api03.6bqb.com/toutiao/detail?apikey=B10A922C01D27BB7EEDB02717A72BDA1&itemId=" + news_id;
-//                OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
-//                Request request = new Request.Builder()
-//                        .url(searchString)//请求接口。如果需要传参拼接到接口后面。
-//                        .build();
-//                Response response = null;
-//                response = client.newCall(request).execute();//得到Response 对象
-//                if (response.isSuccessful()) {
-//                    String responsestring = response.body().string();
-//                    Log.d(TAG, "res==" + responsestring);
-//                    //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
-//                    JSONObject root_object = new JSONObject(responsestring);
-//                    nview.post(() -> {
-//                        try {
-//
-//                            JSONObject newsobject = root_object.getJSONObject("data");
-//                            String title = newsobject.getString("title");
-//                            JSONObject avatarURL = newsobject.getJSONObject("media_user");
-//                            TouTiaoUserInfo source = new TouTiaoUserInfo(newsobject.getString("source"), avatarURL.getString("avatar_url"));
-//                            //String avatar=avatarURL.getString("avatar_url");
-//                            //News news = NewsSearchJsonConversion.GetNewsFromSearchJson(TAG,newsobject);
-//                            ToutiaoNews news = new ToutiaoNews();
-//                            news.setTitle(title);
-//                            news.setUserInfo(source);
-//
-//                            if (news != null) {
-//                                newslist.add(news);
-//                            }
-//                            ShowPraise.NewsItemAdapter adapter;
-//                            adapter = new ShowPraise.NewsItemAdapter(newslist, ShowPraise.this);
-//                            nview.setAdapter(adapter);
-//                        } catch (JSONException e) {
-//                            Log.d(TAG, e.getMessage());
-//                            e.printStackTrace();
-//                        }
-//                    });
-//                }
-//            } catch (IOException | JSONException e) {
-//                e.printStackTrace();
-//                Log.d(TAG, e.toString());
-//            }
-//        }).start();
-//        //Thread.;
-//    }
+
+
+    private ProgressDialog progressDialog;
+    public void buildProgressDialog(int id) {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(ShowPraise.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        progressDialog.setMessage("正在载入");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    public void cancelProgressDialog() {
+        if (progressDialog != null)
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+    }
 
 
     public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewholder>{
@@ -228,11 +207,11 @@ public class ShowPraise extends AppCompatActivity {
             holder.news.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User user=BmobUser.getCurrentUser(User.class);
+                    //User user=BmobUser.getCurrentUser(User.class);
                     String title = newsItem.getTitle();
                     String item_id = newsItem.getItem_id();
                     String source = newsItem.getUserInfo().getName();
-                    String praiserPhoneNumber = user.getMobilePhoneNumber();
+                    //String praiserPhoneNumber = user.getMobilePhoneNumber();
                     new Thread(() -> {
                         try {
 
@@ -241,6 +220,7 @@ public class ShowPraise extends AppCompatActivity {
                             Request request = new Request.Builder()
                                     .url(detailurl+item_id)//请求接口。如果需要传参拼接到接口后面。
                                     .build();
+                            //Log.d(TAG,"itemid="+item_id);
                             Response response = null;
                             response = client.newCall(request).execute();//得到Response 对象
                             if (response.isSuccessful()) {
@@ -264,7 +244,7 @@ public class ShowPraise extends AppCompatActivity {
                                 intent.putExtra("source",source);
                                 intent.putExtra("publish_time",time);
                                 intent.putExtra("avatar_url",avatar_url);
-                                intent.putExtra("praiserPhoneNumber",praiserPhoneNumber);
+                                //intent.putExtra("praiserPhoneNumber",praiserPhoneNumber);
                                 startActivity(intent);
                             }
                         } catch (IOException | JSONException e) {

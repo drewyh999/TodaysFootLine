@@ -9,17 +9,18 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="254dp"
+        android:layout_width="match_parent"
         android:layout_height="289dp"
+        app:srcCompat="@drawable/picture1"
         tools:layout_editor_absoluteX="141dp"
         tools:layout_editor_absoluteY="80dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/change_pic"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="选择头像"
         tools:layout_editor_absoluteX="161dp"
         tools:layout_editor_absoluteY="265dp" />
 </LinearLayout>

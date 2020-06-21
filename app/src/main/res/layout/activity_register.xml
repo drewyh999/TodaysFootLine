@@ -33,7 +33,7 @@
         android:id="@+id/send"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="发送"
+        android:text="发送验证码"
         tools:layout_editor_absoluteX="156dp"
         tools:layout_editor_absoluteY="255dp" />
 
@@ -49,7 +49,6 @@
         android:id="@+id/mTvInfo"
         android:layout_width="fill_parent"
         android:layout_height="508dp"
-        android:text="TextView"
         tools:layout_editor_absoluteX="143dp"
         tools:layout_editor_absoluteY="453dp" />
 </LinearLayout>

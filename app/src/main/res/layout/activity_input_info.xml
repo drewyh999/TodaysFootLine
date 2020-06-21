@@ -13,7 +13,7 @@
         android:layout_width="415dp"
         android:layout_height="86dp"
         android:inputType="text"
-        android:text="请输入用户名"
+        android:hint="请输入用户名"
         tools:layout_editor_absoluteX="-1dp"
         tools:layout_editor_absoluteY="-2dp" />
 
@@ -21,8 +21,7 @@
         android:id="@+id/user_password"
         android:layout_width="414dp"
         android:layout_height="80dp"
-        android:text="请输入密码"
-        android:inputType="textPassword"
+        android:hint="请输入密码"
         tools:layout_editor_absoluteX="-2dp"
         tools:layout_editor_absoluteY="107dp" />
 
@@ -30,8 +29,7 @@
         android:id="@+id/confirm_password"
         android:layout_width="415dp"
         android:layout_height="78dp"
-        android:inputType="textPassword"
-        android:text="再次确认密码"
+        android:hint="再次确认密码"
         tools:layout_editor_absoluteX="-2dp"
         tools:layout_editor_absoluteY="202dp" />
 
@@ -39,7 +37,7 @@
         android:id="@+id/regi_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="确认注册"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="334dp" />
 
@@ -47,7 +45,6 @@
         android:id="@+id/textView4"
         android:layout_width="204dp"
         android:layout_height="101dp"
-        android:text="TextView"
         tools:layout_editor_absoluteX="105dp"
         tools:layout_editor_absoluteY="484dp" />
 

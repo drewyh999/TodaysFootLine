@@ -19,19 +19,19 @@
             android:id="@+id/newperson"
             android:layout_width="match_parent"
             android:layout_height="210dp"
-            android:text="TextView" />
+             />
 
         <Button
             android:id="@+id/Tologin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="login" />
+            android:text="登陆" />
 
         <Button
             android:id="@+id/Tosign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="sign" />
+            android:text="注册" />
 
 
     </LinearLayout>

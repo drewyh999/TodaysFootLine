@@ -15,43 +15,45 @@
         <ImageView
             android:id="@+id/PersonalPhoto"
             android:layout_width="match_parent"
-            android:layout_height="144dp"
+            android:layout_height="280dp"
             android:src="@android:drawable/ic_menu_gallery" />
 
         <TextView
             android:id="@+id/person_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:gravity="center"
+
+            android:layout_height="38dp" />
 
         <Button
             android:id="@+id/person_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit" />
+            android:layout_height="63dp"
+            android:text="编辑个人信息" />
 
         <Button
             android:id="@+id/praise_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="praise" />
+            android:layout_height="60dp"
+            android:text="查看点赞内容" />
+
         <Button
             android:id="@+id/comment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Comment" />
+            android:layout_height="60dp"
+            android:text="查看评论内容" />
 
         <Button
             android:id="@+id/logout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout" />
+            android:layout_height="60dp"
+            android:text="注销" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="181dp"
-            android:text="TextView" />
+             />
 
 
     </LinearLayout>

@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class Register extends AppCompatActivity {
     private EditText mAccount;                        //用户名编辑
@@ -56,7 +59,7 @@ public class Register extends AppCompatActivity {
                 if (e == null) {
                     mTvInfo.append("发送验证码成功，短信ID：" + smsId + "\n");
                 } else {
-                    mTvInfo.append("发送验证码失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
+                    mTvInfo.append("发送验证码失败："  + "\n");
                 }
             }
         });
@@ -76,7 +79,7 @@ public class Register extends AppCompatActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else {
-                    mTvInfo.append("验证码验证失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
+                    mTvInfo.append("验证码验证失败："  + "\n");
                 }
             }
         });
