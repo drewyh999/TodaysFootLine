@@ -154,7 +154,7 @@ public class VideoDetail extends AppCompatActivity {
             holder.avatar.setImageURI(Uri.parse(list.get(position).getUser_avatar()));
             holder.username.setText(list.get(position).getUser_name());
             holder.content.setText(list.get(position).getContent());
-
+            //TODO Add the time of comment
         }
 
         @Override
