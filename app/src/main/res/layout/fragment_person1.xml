@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hinewperson"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PersonFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A6FFFFFF"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/newperson"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/Tologin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login" />
+
+        <Button
+            android:id="@+id/Tosign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sign" />
+
+
+    </LinearLayout>
+
+</FrameLayout>

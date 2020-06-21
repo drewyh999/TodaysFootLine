@@ -48,7 +48,7 @@
     <TextView
         android:id="@+id/mTvInfo"
         android:layout_width="fill_parent"
-        android:layout_height="220dp"
+        android:layout_height="508dp"
         android:text="TextView"
         tools:layout_editor_absoluteX="143dp"
         tools:layout_editor_absoluteY="453dp" />
