@@ -8,12 +8,12 @@
 
     <item
             android:id="@+id/videofragment"
-            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:icon="@drawable/playfill"
             android:title="视频"/>
 
     <item
             android:id="@+id/personalinfofragment"
-            android:icon="@drawable/ic_notifications_black_24dp"
+            android:icon="@drawable/cus"
             android:title="个人信息"/>
 
 </menu>
