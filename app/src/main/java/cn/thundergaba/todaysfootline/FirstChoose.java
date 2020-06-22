@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 public class FirstChoose extends Activity {
@@ -28,7 +30,6 @@ public class FirstChoose extends Activity {
     private EditText mPwd;                            //密码编辑
     private Button mRegisterButton;                   //注册按钮
     private Button mLoginButton;                      //登录按钮
-    private TextView Snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class FirstChoose extends Activity {
         mLoginButton=findViewById(R.id.login);
         mRegisterButton.setOnClickListener(mListener);
         mLoginButton.setOnClickListener(mListener);
-        Snackbar=findViewById(R.id.text1);
     }
     View.OnClickListener mListener=new View.OnClickListener() {
         @Override
@@ -76,7 +76,7 @@ public class FirstChoose extends Activity {
                 public void done(User bmobUser, BmobException e) {
                     if (e == null) {
                         User user = BmobUser.getCurrentUser(User.class);
-                        Snackbar.append("登录成功：" + user.getUsername());
+                        Snackbar.make(view,"登录成功：",Snackbar.LENGTH_SHORT);
 //                        Intent intent_FirstChoose_to_VideoFragment = new Intent(FirstChoose.this, PictureChoose.class);
 //                        startActivity(intent_FirstChoose_to_VideoFragment);
 //                        finish();
@@ -88,7 +88,7 @@ public class FirstChoose extends Activity {
                             startActivity(new Intent(FirstChoose.this,NavigationActivity.class));
                         }
                     } else {
-                        Snackbar.append("登录失败：" + e.getMessage()+ "\n");
+                        Snackbar.make(view,"登录失败：",Snackbar.LENGTH_SHORT);
                     }
                 }
             });

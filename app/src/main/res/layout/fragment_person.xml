@@ -1,61 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PersonFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context=".PersonFragment"
+    android:background="@drawable/background1"
+    android:orientation="vertical">
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="#DCDCDC"
+        android:radius="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:background="#A6FFFFFF">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/PersonalPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="195dp"
-            android:src="@android:drawable/ic_menu_gallery" />
+<LinearLayout
+    android:layout_marginTop="50dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/person_name"
-            android:layout_width="match_parent"
-            android:gravity="center"
+    <TextView
+        android:id="@+id/person_name"
+        android:layout_width="218dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:background="#F8F8FF"
+        android:gravity="center" />
 
-            android:layout_height="38dp" />
+    <ImageView
+        android:id="@+id/PersonalPhoto"
+        android:layout_width="143dp"
+        android:layout_height="161dp"
+        android:layout_marginRight="5dp"
+        android:background="#F8F8FF"
 
-        <Button
+        android:src="@android:drawable/ic_menu_gallery" />
+</LinearLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <Button
+        android:layout_marginTop="30dp"
             android:id="@+id/person_edit"
+
             android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:text="编辑个人信息" />
+            android:layout_height="60dp"
+        android:background="#F5F5F5"
+
+        android:text="编辑个人信息" />
 
         <Button
             android:id="@+id/praise_content"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="#F5F5F5"
+
             android:text="查看点赞内容" />
 
         <Button
             android:id="@+id/comment"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="#F5F5F5"
+
             android:text="查看评论内容" />
 
         <Button
             android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="#F5F5F5"
+
             android:text="注销" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="181dp"
-             />
-
-
+</LinearLayout>
     </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

@@ -45,7 +45,6 @@ import cn.thundergaba.todaysfootline.NewsDetail;
 
 public class ShowPraise extends AppCompatActivity {
     private String typename, item_id;
-    private TextView showpraise;
     private String TAG = "woshidashabi";
     private RecyclerView mview;
     private NewsItemAdapter newsItemAdapter;

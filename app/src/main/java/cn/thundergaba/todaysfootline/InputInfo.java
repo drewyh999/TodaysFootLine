@@ -13,10 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 public class InputInfo extends AppCompatActivity {
     private EditText musername,muserpwd,mconfirmpwd;
     private Button mconfirmregi;
-    private TextView mTvInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +28,16 @@ public class InputInfo extends AppCompatActivity {
         mconfirmpwd=findViewById(R.id.confirm_password);
         mconfirmregi=findViewById(R.id.regi_confirm);
         mconfirmregi.setOnClickListener(mListener);
-        mTvInfo=findViewById(R.id.textView4);
     }
 
     View.OnClickListener mListener=new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            InputInfo();
+            InputInfo(view);
         }
     };
 
-    public void InputInfo() {
+    public void InputInfo(View view) {
         if (isUserNameAndPwdValid()) {
             String username = musername.getText().toString().trim();
             String userpwd = muserpwd.getText().toString().trim();
@@ -55,7 +55,7 @@ public class InputInfo extends AppCompatActivity {
                 @Override
                 public void done(User user,BmobException e) {
                     if (e == null) {
-                        mTvInfo.append("短信注册成功：" + user.getUsername());
+                        Snackbar.make(view,"短信注册成功：",Snackbar.LENGTH_SHORT);
                         Intent intent = new Intent(InputInfo.this,FirstChoose.class);
 //                        Bundle bundle = new Bundle();
 //                        bundle.putString("phonenumber",phone);
@@ -63,7 +63,7 @@ public class InputInfo extends AppCompatActivity {
 //                        intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
-                        mTvInfo.append("账号已存在或网络故障"  + "\n");
+                        Snackbar.make(view,"账号已存在或网络故障",Snackbar.LENGTH_SHORT);
                         Intent intent = new Intent(InputInfo.this,FirstChoose.class);
                         startActivity(intent);
                     }

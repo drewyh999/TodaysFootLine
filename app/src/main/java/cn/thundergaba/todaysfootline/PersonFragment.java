@@ -11,12 +11,15 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.http.I;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 
@@ -38,6 +41,7 @@ public class PersonFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String TAG="woshishabi";
 
     public PersonFragment() {
         // Required empty public constructor
@@ -82,62 +86,62 @@ public class PersonFragment extends Fragment {
         //BmobUser.logOut();
         View view;
         if (BmobUser.isLogin()) {
-        view=inflater.inflate(R.layout.fragment_person, container, false);
-        ImageView pictureview = view.findViewById(R.id.PersonalPhoto);
-        TextView personname = view.findViewById(R.id.person_name);
-        Button personedit = view.findViewById(R.id.person_edit);
-        Button praiseContent=view.findViewById(R.id.praise_content);
-        Button commentContent=view.findViewById(R.id.comment);
-        Button personlogout=view.findViewById(R.id.logout);
-        Integer picturesource;
-        HashMap<Integer, Integer> picturemap = new HashMap<Integer, Integer>();
-        picturemap.put(R.id.imageView2, R.drawable.picture1);
-        picturemap.put(R.id.imageView3, R.drawable.picture2);
+            view=inflater.inflate(R.layout.fragment_person, container, false);
+            ImageView pictureview = view.findViewById(R.id.PersonalPhoto);
+            TextView personname = view.findViewById(R.id.person_name);
+            Button personedit = view.findViewById(R.id.person_edit);
+            Button praiseContent=view.findViewById(R.id.praise_content);
+            Button commentContent=view.findViewById(R.id.comment);
+            Button personlogout=view.findViewById(R.id.logout);
+            Integer picturesource;
+            HashMap<Integer, Integer> picturemap = new HashMap<Integer, Integer>();
+            picturemap.put(R.id.imageView2, R.drawable.picture1);
+            picturemap.put(R.id.imageView3, R.drawable.picture2);
 
-        User user = BmobUser.getCurrentUser(User.class);
+            User user = BmobUser.getCurrentUser(User.class);
 
 
 
-        String pictureidd = user.getAvatar();
-        Integer pictureid=Integer.parseInt(pictureidd);
-        //personname.setText(pictureidd);
-        picturesource = picturemap.get(pictureid);
-        pictureview.setImageDrawable(getResources().getDrawable(picturesource));
-        personname.setText(user.getUsername());
-        praiseContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(),ShowPraise.class));
-            }
-        });
+            String pictureidd = user.getAvatar();
+            Log.d(TAG,user.getAvatar());
+            Integer pictureid=Integer.parseInt(pictureidd);
+            //personname.setText(pictureidd);
+            picturesource = picturemap.get(pictureid);
+            pictureview.setImageDrawable(getResources().getDrawable(picturesource));
+            personname.setText(user.getUsername());
+            praiseContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(),ShowPraise.class));
+                }
+            });
 //
-        commentContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(),ShowComment.class));
-            }
-        });
+            commentContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(),ShowComment.class));
+                }
+            });
 
-        personedit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(),ChangeInfo.class));
-            }
-        });
+            personedit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(),ChangeInfo.class));
+                }
+            });
 
-        personlogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BmobUser.logOut();
-                startActivity(new Intent(getActivity(),personmoduledev.class));
-            }
-        });
+            personlogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BmobUser.logOut();
+                    startActivity(new Intent(getActivity(),personmoduledev.class));
+                }
+            });
 
         }
         else{
             view=inflater.inflate(R.layout.fragment_person1,container,false);
-            TextView newperson=view.findViewById(R.id.newperson);
-            newperson.setText("sorry！！！您还没有登录，请点击选择！");
+            Snackbar.make(view,"您还没有登录，请点击选择",Snackbar.LENGTH_SHORT);
             Button Tologin=view.findViewById(R.id.Tologin);
             Button Tosign=view.findViewById(R.id.Tosign);
             Tologin.setOnClickListener(new View.OnClickListener() {

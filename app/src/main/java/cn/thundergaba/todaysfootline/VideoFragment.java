@@ -160,6 +160,7 @@ public class VideoFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_video_view, container, false);
         InitCategories();
+
         RecyclerView videolist = view.findViewById(R.id.v_video_list);
         LinearLayoutManager video_list_manager = new LinearLayoutManager(getActivity());
         SearchView searchView = view.findViewById(R.id.v_search_view);

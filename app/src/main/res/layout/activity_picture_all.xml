@@ -4,22 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background1"
     tools:context=".PictureAll"
-    android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_marginTop="90dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/picture1"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="38dp" />
+        android:background="#99000000"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请选择您的头像"
+            android:textSize="33dp"
+            android:textColor="#F8F8FF"
+            android:gravity="center"
+            ></TextView>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/picture1"
+            tools:layout_editor_absoluteX="93dp"
+            tools:layout_editor_absoluteY="38dp" />
 
     <ImageView
+
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/picture2"
         tools:layout_editor_absoluteX="93dp"
         tools:layout_editor_absoluteY="335dp" />
+    </LinearLayout>
 </LinearLayout>

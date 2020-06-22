@@ -17,5 +17,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_person" />
+        tools:layout="@layout/fragment_person"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

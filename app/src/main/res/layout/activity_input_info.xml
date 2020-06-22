@@ -5,47 +5,134 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InputInfo"
+    android:background="@drawable/background1"
     android:orientation="vertical">
 
 
-    <EditText
-        android:id="@+id/user_name"
-        android:layout_width="415dp"
-        android:layout_height="86dp"
-        android:inputType="text"
-        android:hint="请输入用户名"
-        tools:layout_editor_absoluteX="-1dp"
-        tools:layout_editor_absoluteY="-2dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:background="#99000000">
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/user_name"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_gravity="center"
 
-    <EditText
-        android:id="@+id/user_password"
-        android:layout_width="414dp"
-        android:layout_height="80dp"
-        android:hint="请输入密码"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="107dp" />
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:textColor="#9F9FA0"
+            android:textColorHint="#9F9FA0"
+            android:hint="请输入用户名"/>
 
-    <EditText
-        android:id="@+id/confirm_password"
-        android:layout_width="415dp"
-        android:layout_height="78dp"
-        android:hint="再次确认密码"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="202dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#83738F"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"></View>
 
-    <Button
-        android:id="@+id/regi_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="确认注册"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="334dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/user_password"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_gravity="center"
+            android:hint="请输入密码"
+            android:textColor="#9F9FA0"
+            android:textColorHint="#9F9FA0"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#83738F"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"></View>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="204dp"
-        android:layout_height="101dp"
-        tools:layout_editor_absoluteX="105dp"
-        tools:layout_editor_absoluteY="484dp" />
+        <EditText
+            android:id="@+id/confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_gravity="center"
+            android:hint="再次确认密码"
+            android:textColor="#9F9FA0"
+            android:textColorHint="#9F9FA0"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#83738F"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"></View>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+        <Button
+            android:layout_marginTop="20dp"
+            android:id="@+id/regi_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150dp"
+            android:layout_marginRight="25dp"
+            android:text="确认注册"
+            android:background="@drawable/buttonstyle"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="334dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+<!--    <EditText-->
+<!--        android:id="@+id/user_name"-->
+<!--        android:layout_width="415dp"-->
+<!--        android:layout_height="86dp"-->
+<!--        android:inputType="text"-->
+<!--        android:hint="请输入用户名"-->
+<!--        tools:layout_editor_absoluteX="-1dp"-->
+<!--        tools:layout_editor_absoluteY="-2dp" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/user_password"-->
+<!--        android:layout_width="414dp"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:hint="请输入密码"-->
+<!--        tools:layout_editor_absoluteX="-2dp"-->
+<!--        tools:layout_editor_absoluteY="107dp" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/confirm_password"-->
+<!--        android:layout_width="415dp"-->
+<!--        android:layout_height="78dp"-->
+<!--        android:hint="再次确认密码"-->
+<!--        tools:layout_editor_absoluteX="-2dp"-->
+<!--        tools:layout_editor_absoluteY="202dp" />-->
+
+
 
 </LinearLayout>

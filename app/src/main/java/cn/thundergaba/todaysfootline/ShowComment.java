@@ -84,9 +84,11 @@ public class ShowComment extends AppCompatActivity {
 
 
     public void shownews(RecyclerView nview, String news_id) throws InterruptedException {
+        new Thread(()->{
+            try{
 
-        new Thread(() -> {
-            try {
+                //for (int i=0;i<news_list.size();i++){
+                //String news_id=news_list.get(i);
                 final String searchString = "https://api03.6bqb.com/toutiao/detail?apikey=B10A922C01D27BB7EEDB02717A72BDA1&itemId=" + news_id;
                 OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
                 Request request = new Request.Builder()
@@ -124,13 +126,17 @@ public class ShowComment extends AppCompatActivity {
                         }
                     });
                 }
-            } catch (IOException | JSONException e) {
+                //}
+            }catch (IOException | JSONException e) {
                 e.printStackTrace();
                 Log.d(TAG, e.toString());
             }
         }).start();
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
+
+
+
 
 
 
@@ -152,7 +158,6 @@ public class ShowComment extends AppCompatActivity {
                 progressDialog.dismiss();
             }
     }
-
 
 
     public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewholder>{
@@ -187,11 +192,9 @@ public class ShowComment extends AppCompatActivity {
             holder.news.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User user=BmobUser.getCurrentUser(User.class);
                     String title = newsItem.getTitle();
                     String item_id = newsItem.getItem_id();
                     String source = newsItem.getUserInfo().getName();
-                    String praiserPhoneNumber = user.getMobilePhoneNumber();
                     new Thread(() -> {
                         try {
 
@@ -203,10 +206,10 @@ public class ShowComment extends AppCompatActivity {
                             Response response = null;
                             response = client.newCall(request).execute();//得到Response 对象
                             if (response.isSuccessful()) {
-                                //Log.d(TAG, "response.code()==" + response.code());
-                                //Log.d(TAG, "response.message()==" + response.message());
+                                Log.d(TAG, "response.code()==" + response.code());
+                                Log.d(TAG, "response.message()==" + response.message());
                                 String responsestring = response.body().string();
-                                //Log.d(TAG, "res==" + responsestring);
+                                Log.d(TAG, "res==" + responsestring);
                                 //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                                 JSONObject root_object = new JSONObject(responsestring);
                                 JSONObject news_object_array = root_object.getJSONObject("data");
@@ -214,8 +217,8 @@ public class ShowComment extends AppCompatActivity {
                                 String detail = new String(news_object_array.getString("content"));
                                 String avatar_url = new String(media_user.getString("avatar_url"));
                                 Date time = new Date(news_object_array.getInt("publish_time"));
-                                //Log.d(TAG, "detail==" + detail);
-                                //Log.d(TAG, "publish_time==" + time);
+                                Log.d(TAG, "detail==" + detail);
+                                Log.d(TAG, "publish_time==" + time);
                                 Intent intent = new Intent(ShowComment.this,NewsDetail.class);
                                 intent.putExtra("item_id",item_id);
                                 intent.putExtra("content",detail);
@@ -223,12 +226,11 @@ public class ShowComment extends AppCompatActivity {
                                 intent.putExtra("source",source);
                                 intent.putExtra("publish_time",time);
                                 intent.putExtra("avatar_url",avatar_url);
-                                intent.putExtra("praiserPhoneNumber",praiserPhoneNumber);
                                 startActivity(intent);
                             }
                         } catch (IOException | JSONException e) {
                             e.printStackTrace();
-                            //Log.d(TAG, e.toString());
+                            Log.d(TAG, e.toString());
                         }
                     }).start();
 

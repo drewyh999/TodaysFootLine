@@ -5,50 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Register"
+    android:background="@drawable/background1"
     android:orientation="vertical">
 
 
 
-
+<LinearLayout
+    android:layout_marginTop="90dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#99404348"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/phone_number"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:inputType="phone"
         android:hint="请输入手机号码"
         tools:layout_editor_absoluteX="122dp"
         tools:layout_editor_absoluteY="81dp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <EditText
         android:id="@+id/text"
-        android:layout_width="fill_parent"
-        android:inputType="textPassword"
+        android:layout_width="259dp"
         android:layout_height="60dp"
         android:hint="请输入验证码"
+        android:inputType="textPassword"
         tools:layout_editor_absoluteX="122dp"
         tools:layout_editor_absoluteY="150dp" />
 
     <Button
         android:id="@+id/send"
+        android:background="@drawable/buttonstyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="发送验证码"
         tools:layout_editor_absoluteX="156dp"
         tools:layout_editor_absoluteY="255dp" />
+</LinearLayout>
 
     <Button
+        android:layout_marginTop="30dp"
+        android:background="@drawable/buttonstyle"
         android:id="@+id/confirm"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="确认"
+        android:layout_gravity="center"
         tools:layout_editor_absoluteX="156dp"
         tools:layout_editor_absoluteY="255dp" />
 
-    <TextView
-        android:id="@+id/mTvInfo"
-        android:layout_width="fill_parent"
-        android:layout_height="508dp"
-        tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="453dp" />
+</LinearLayout>
 </LinearLayout>
